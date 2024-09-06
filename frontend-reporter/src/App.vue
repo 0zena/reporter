@@ -2,6 +2,8 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 
+import Button from 'primevue/button';
+
 </script>
 
 <template>
@@ -15,6 +17,7 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
+      <Button label="Profile" icon="pi pi-user" />
     </div>
   </header>
 
