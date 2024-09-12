@@ -14,6 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ApiController;
+
+Route::middleware(['web'])->group(function () {
+    Route::post('/register', [UserController::class, 'register']);
+    Route::post('/login', [UserController::class, 'login']);
+    Route::post('/logout', [UserController::class, 'logout']);
+    Route::get('/user', [UserController::class, 'getUser'])->middleware('auth');
+
+    // '/api/status' returns 'API is working' if GET request succeeds
+    Route::get('/status', [ApiController::class, 'status']);
 });
