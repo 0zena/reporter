@@ -61,10 +61,4 @@ class UserController extends Controller
         return response()->json(['user' => Auth::user()], 200);
     }
 
-    public function test()
-    {
-        return response()->json([
-            'message' => 'test!',
-        ]);
-    }
 }
