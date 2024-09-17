@@ -1,8 +1,9 @@
 <script setup lang="ts">
-
+import Logout from '@/components/Logout.vue';
 </script>
 
 <template>
+  <Logout />
   <div class="w-full min-h-screen h-auto bg-zinc-500">
     <div id="header-placeholder" class="w-full h-[65px] bg-[#303030]"></div>
 
