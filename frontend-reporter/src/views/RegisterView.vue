@@ -15,6 +15,11 @@
         </FloatLabel>
 
         <FloatLabel class="mb-7">
+          <label for="surname" class="block mb-2">Surame</label>
+          <InputText v-model="surname" id="surname" type="text" class="w-full" required />
+        </FloatLabel>
+
+        <FloatLabel class="mb-7">
           <label for="email" class="block mb-2">Email</label>
           <InputText v-model="email" id="email" type="email" class="w-full" required />
         </FloatLabel>
@@ -50,6 +55,7 @@ import Button from 'primevue/button';
 import FloatLabel from 'primevue/floatlabel';
 
 const name = ref('');
+const surname = ref('');
 const email = ref('');
 const password = ref('');
 const passwordConfirmation = ref('');
@@ -74,6 +80,7 @@ const register = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name: name.value,
+        surname: surname.value,
         email: email.value,
         password: password.value,
         password_confirmation: passwordConfirmation.value
