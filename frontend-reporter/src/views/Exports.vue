@@ -28,6 +28,6 @@ const downloadPDF = async () => {
 
 <template>
     <div id="wrapper" class="flex content-start flex-wrap">
-        <Button label="Profile" icon="pi pi-user" class="w-[125px] m-[25px]" @click="downloadPDF" />
+        <Button label="Get User" icon="pi pi-download" class="w-[125px] m-[25px]" @click="downloadPDF" />
     </div>
 </template>
