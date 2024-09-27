@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\PDFExportController;
 
 Route::middleware(['web'])->group(function () {
     Route::post('/register', [UserController::class, 'register']);
@@ -25,4 +26,9 @@ Route::middleware(['web'])->group(function () {
 
     // '/api/status' returns 'API is working' if GET request succeeds
     Route::get('/status', [ApiController::class, 'status']);
+
+    // Returns PDF with name, surname, email, phone number of the given user id
+    Route::get('/export-user-pdf/{id}', [PDFExportController::class, 'exportUserPDF']);
+    Route::get('/export-pdf-test', [PDFExportController::class, 'status']);
+
 });
