@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Button label="Logout" class="p-button-danger" @click="logout" />
+    <Button label="Logout"   @click="logout" />
   </div>
 </template>
 
