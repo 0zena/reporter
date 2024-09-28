@@ -13,7 +13,7 @@
         </FloatLabel>
 
         <FloatLabel class="mb-7">
-          <Password v-model="password" toggleMask id="password" class="w-full" required />
+          <Password v-model="password" toggleMask :feedback="false" id="password" class="w-full" required />
           <label for="password" class="block mb-2">Password</label>
         </FloatLabel>
 
