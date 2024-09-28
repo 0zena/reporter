@@ -24,13 +24,18 @@
           <InputText v-model="email" id="email" type="email" class="w-full" required />
         </FloatLabel>
 
+        <FloatLabel class="mb-7">
+          <label for="phone_number" class="block mb-2">Phone Number (Optional)</label>
+          <InputText v-model="phoneNumber" id="phone_number" type="tel" class="w-full" />
+        </FloatLabel>
+
         <FloatLabel class="mb-7 w-full">
           <Password v-model="password" type="password" toggleMask id="password" class="w-full input-password" required />
           <label for="password" class="block mb-2">Password</label>
         </FloatLabel>
 
         <FloatLabel class="mb-7">
-          <Password v-model="passwordConfirmation" toggleMask id="password_confirmation" class="w-full input-password" required />
+          <Password v-model="passwordConfirmation" toggleMask :feedback="false" id="password_confirmation" class="w-full input-password" required />
           <label for="password_confirmation" class="block mb-2">Confirm Password</label>
         </FloatLabel>
         
@@ -57,6 +62,7 @@ import FloatLabel from 'primevue/floatlabel';
 const name = ref('');
 const surname = ref('');
 const email = ref('');
+const phoneNumber = ref('');
 const password = ref('');
 const passwordConfirmation = ref('');
 const errorMessage = ref('');
@@ -82,6 +88,7 @@ const register = async () => {
         name: name.value,
         surname: surname.value,
         email: email.value,
+        phone_number: phoneNumber.value,
         password: password.value,
         password_confirmation: passwordConfirmation.value
       })
