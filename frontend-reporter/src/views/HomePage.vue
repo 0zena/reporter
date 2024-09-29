@@ -3,7 +3,7 @@
     
     <div
       class="absolute inset-0 bg-cover bg-center"
-      :style="{ backgroundImage: `url('/image.png')` }"
+      :style="{ backgroundImage: `url('./src/assets/image.png')` }"
     ></div>
 
     
