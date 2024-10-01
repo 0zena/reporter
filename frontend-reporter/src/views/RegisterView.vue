@@ -1,4 +1,5 @@
 <template>
+  <NavigationBar></NavigationBar>
   <div class="fixed top-0 left-0 p-4"> 
     <Button icon="pi pi-arrow-left" @click="goToHomepage" />
   </div>
@@ -52,6 +53,8 @@
 </template>
 
 <script setup lang="ts">
+ 
+
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import InputText from 'primevue/inputtext';
