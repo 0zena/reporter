@@ -11,16 +11,13 @@
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
 import { inject, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Button from 'primevue/button';
-
 const isAuthenticated = inject('isAuthenticated') as any;
 const setAuthenticated = inject('setAuthenticated') as (value: boolean) => void;
 const router = useRouter();
-
 const logout = async () => {
   try {
     const response = await fetch('http://localhost:8000/api/logout', {
@@ -36,14 +33,12 @@ const logout = async () => {
     console.error('Logout failed');
   }
 };
-
 // Check user session status on page load
 onMounted(async () => {
   try {
     const response = await fetch('http://localhost:8000/api/user', {
       credentials: 'include',
     });
-
     if (response.ok) {
       const data = await response.json();
       if (data.user) {
@@ -56,17 +51,13 @@ onMounted(async () => {
     setAuthenticated(false);
   }
 });
-
 const goToLogin = () => {
   router.push('/login');
 };
-
 const goToRegister = () => {
   router.push('/register');
 };
 </script>
-
-
 <style scoped>
 .fixed {
   position: fixed;

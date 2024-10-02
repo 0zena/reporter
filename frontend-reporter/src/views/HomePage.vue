@@ -37,11 +37,9 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter(); 
-
     const goToListings = () => {
       router.push('/vacancies'); // Redirect to the vacancies page
     };
-
     return {
       goToListings
     };

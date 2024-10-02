@@ -74,7 +74,6 @@ onMounted(async () => {
     const response = await fetch('http://localhost:8000/api/user', {
       credentials: 'include',
     });
-
     if (response.ok) {
       const data = await response.json();
       if (data.user) {
@@ -89,19 +88,19 @@ onMounted(async () => {
   }
 });
 
+
 const goToForgotPassword = () => {
   router.push('/forgot-password');
 };
 
 const goToRegister = () => {
-  router.push('/register');
+  router.push('/register'); 
 }
 
 const goToHomepage = () => {
-  router.push('/');
+  router.push('/'); 
 }
 </script>
-
 
 
 
