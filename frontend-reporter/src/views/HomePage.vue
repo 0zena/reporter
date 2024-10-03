@@ -28,17 +28,21 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Button from "primevue/button"; 
+import Button from "primevue/button";
+import { useRouter } from 'vue-router'; 
 
 export default defineComponent({
   components: {
     Button,
   },
-  methods: {
-    goToListings() {
-      // Lai ietu uz to page
-      console.log('Navigating to listings page');
-    }
+  setup() {
+    const router = useRouter(); 
+    const goToListings = () => {
+      router.push('/vacancies'); // Redirect to the vacancies page
+    };
+    return {
+      goToListings
+    };
   }
 });
 </script>
