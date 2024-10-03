@@ -7,7 +7,7 @@
           <h1 class="text-xl font-bold cursor-pointer text-black">Reporter</h1>
 
           <!-- Desktop Menu -->
-          <div class="hidden md:flex justify-around space-x-4">
+          <div class="hidden justify-around space-x-4 md:flex ">
             <a href="#" class="relative text-gray-700 link-underline">Vacancies</a>
             <a href="#" class="relative text-gray-700 link-underline">My Vacancies</a>
             <a href="#" class="relative text-gray-700 link-underline">Favorites</a>
@@ -28,7 +28,7 @@
       </div>
 
       <!-- Mobile Menu -->
-      <div v-if="isOpen" class="md:hidden bg-white shadow-lg px-6 py-4 space-y-2">
+      <div v-if="isOpen" class="bg-white shadow-lg px-6 py-4 space-y-2 md:hidden">
         <a href="#" class="block text-gray-700 link-underline">Vacancies</a>
         <a href="#" class="block text-gray-700 link-underline">My Vacancies</a>
         <a href="#" class="block text-gray-700 link-underline">Favorites</a>
