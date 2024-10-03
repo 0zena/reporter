@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, inject, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import InputText from 'primevue/inputtext';
 import Password from 'primevue/password';
@@ -43,15 +43,21 @@ const password = ref('');
 const errorMessage = ref('');
 const router = useRouter();
 
+// Inject the global isAuthenticated state and setAuthenticated method
+const isAuthenticated = inject('isAuthenticated') as any;
+const setAuthenticated = inject('setAuthenticated') as (value: boolean) => void;
+
 const login = async () => {
   try {
     const response = await fetch('http://localhost:8000/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.value, password: password.value })
+      body: JSON.stringify({ email: email.value, password: password.value }),
+      credentials: 'include', // session cookie
     });
 
     if (response.ok) {
+      setAuthenticated(true); 
       const data = await response.json();
       router.push('/vacancies');  // Redirect to vacancies after login
     } else {
@@ -61,6 +67,27 @@ const login = async () => {
     errorMessage.value = 'Something went wrong. Try again later.';
   }
 };
+
+// Check if user is authenticated when the page loads
+onMounted(async () => {
+  try {
+    const response = await fetch('http://localhost:8000/api/user', {
+      credentials: 'include',
+    });
+    if (response.ok) {
+      const data = await response.json();
+      if (data.user) {
+        setAuthenticated(true); // Set auth state to true if session is valid
+        router.push('/vacancies'); // Redirect if authenticated
+      } else {
+        setAuthenticated(false);
+      }
+    }
+  } catch (error) {
+    setAuthenticated(false);
+  }
+});
+
 
 const goToForgotPassword = () => {
   router.push('/forgot-password');
