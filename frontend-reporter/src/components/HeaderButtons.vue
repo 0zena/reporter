@@ -58,10 +58,3 @@ const goToRegister = () => {
   router.push('/register');
 };
 </script>
-<style scoped>
-.fixed {
-  position: fixed;
-  top: 0;
-  right: 0;
-}
-</style>
