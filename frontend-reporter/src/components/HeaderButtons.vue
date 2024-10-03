@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-0 right-0 p-4">
+  <div class="top-0 right-0 p-4">
     <div v-if="isAuthenticated">
       <!-- Show the logout button if the user is logged in -->
       <Button label="Logout" class="p-button-danger" @click="logout" />
@@ -11,6 +11,7 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { inject, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
