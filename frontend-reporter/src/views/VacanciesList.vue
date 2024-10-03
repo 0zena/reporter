@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import Logout from '@/components/Logout.vue';
-import HeaderButtons from '@/components/HeaderButtons.vue';
- import NavigationBar from '../components/navigationbar/NavBar.vue';
+import NavigationBar from '../components/navigationbar/NavBar.vue';
 </script>
 
 <template>
-  <HeaderButtons />
   <div class="w-full min-h-screen h-auto bg-zinc-500">
     <NavigationBar></NavigationBar>
      <div id="main" class="w-full h-auto flex flex-row-reverse">

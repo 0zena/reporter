@@ -15,10 +15,7 @@
         </div>
 
         <!-- Menu for Login/Signup -->
-        <div class="flex space-x-4 items-center">
-          <a href="/login" class="text-gray-800 text-sm">LOGIN</a>
-          <a href="/register" class="bg-indigo-600 px-4 py-2 rounded text-white hover:bg-indigo-500 text-sm">SIGNUP</a>
-        </div>
+        <HeaderButtons />
 
         <!-- Mobile Menu Button -->
         <div class="md:hidden">
@@ -48,6 +45,7 @@
 <script setup>
 import { ref } from 'vue';
 import Quit from '@/components/Logout.vue';
+import HeaderButtons from '@/components/HeaderButtons.vue';
 
 // Manage the mobile menu open/close state
 const isOpen = ref(false);
