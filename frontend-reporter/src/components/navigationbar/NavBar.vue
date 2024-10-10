@@ -7,15 +7,17 @@
           <h1 class="text-xl font-bold cursor-pointer text-black">Reporter</h1>
 
           <!-- Desktop Menu -->
-          <div class="hidden justify-around space-x-4 md:flex ">
+          <div class="hidden justify-around space-x-4 md:flex">
             <a href="#" class="relative text-gray-700 link-underline">Vacancies</a>
             <a href="#" class="relative text-gray-700 link-underline">My Vacancies</a>
             <a href="#" class="relative text-gray-700 link-underline">Favorites</a>
           </div>
         </div>
 
-        <!-- Menu for Login/Signup -->
-        <HeaderButtons />
+        <!-- Menu for Login/Signup/Logout/Profile for Desktop - Hide for mobile view -->
+        <div class="hidden md:flex">
+          <HeaderButtons />
+        </div>
 
         <!-- Mobile Menu Button -->
         <div class="md:hidden">
@@ -27,29 +29,52 @@
         </div>
       </div>
 
-      <!-- Mobile Menu -->
+      <!-- Mobile Menu Dropdown -->
       <div v-if="isOpen" class="bg-white shadow-lg px-6 py-4 space-y-2 md:hidden">
         <a href="#" class="block text-gray-700 link-underline">Vacancies</a>
         <a href="#" class="block text-gray-700 link-underline">My Vacancies</a>
         <a href="#" class="block text-gray-700 link-underline">Favorites</a>
 
-        <!-- Logout Button -->
+        <!-- Add HeaderButtons in the mobile dropdown -->
         <div class="border-t mt-2 pt-2">
-          <Quit />
+          <HeaderButtons class="px-1" />
         </div>
       </div>
     </nav>
+
+    <!-- Edit Profile Popup -->
+    <EditProfileModal v-if="isEditProfileOpen" @close="closeEditProfile" />
   </header>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import Quit from '@/components/Logout.vue';
 import HeaderButtons from '@/components/HeaderButtons.vue';
+import EditProfileModal from '@/components/EditProfileModal.vue';
+
+const isEditProfileOpen = ref(false);
+const user = ref(null); // Store user data here
+
+const openEditProfile = async () => {
+  // Fetch user data from backend when the modal is opened
+  try {
+    const response = await fetch('http://localhost:8000/api/user');
+    if (response.ok) {
+      user.value = await response.json();
+    }
+  } catch (error) {
+    console.error('Failed to fetch user data:', error);
+  }
+
+  isEditProfileOpen.value = true;
+};
+
+const closeEditProfile = () => {
+  isEditProfileOpen.value = false;
+};
 
 // Manage the mobile menu open/close state
 const isOpen = ref(false);
-
 </script>
 
 <style scoped>
