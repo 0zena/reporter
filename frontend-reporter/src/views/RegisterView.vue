@@ -13,21 +13,25 @@
         <FloatLabel class="mb-7">
           <label for="name" class="block mb-2">Name</label>
           <InputText v-model="name" id="name" type="text" class="w-full" required />
+          <p v-if="nameError" class="text-red-500">{{ nameError }}</p>
         </FloatLabel>
 
         <FloatLabel class="mb-7">
-          <label for="surname" class="block mb-2">Surame</label>
+          <label for="surname" class="block mb-2">Surname</label>
           <InputText v-model="surname" id="surname" type="text" class="w-full" required />
+          <p v-if="surnameError" class="text-red-500">{{ surnameError }}</p>
         </FloatLabel>
 
         <FloatLabel class="mb-7">
           <label for="email" class="block mb-2">Email</label>
           <InputText v-model="email" id="email" type="email" class="w-full" required />
+          <p v-if="emailError" class="text-red-500">{{ emailError }}</p>
         </FloatLabel>
 
         <FloatLabel class="mb-7">
           <label for="phone_number" class="block mb-2">Phone Number (Optional)</label>
           <InputText v-model="phoneNumber" id="phone_number" type="tel" class="w-full" />
+          <p v-if="phoneError" class="text-red-500">{{ phoneError }}</p>
         </FloatLabel>
 
         <FloatLabel class="mb-7 w-full">
@@ -53,8 +57,6 @@
 </template>
 
 <script setup lang="ts">
- 
-
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import InputText from 'primevue/inputtext';
@@ -70,19 +72,61 @@ const password = ref('');
 const passwordConfirmation = ref('');
 const errorMessage = ref('');
 const successMessage = ref('');
+const phoneError = ref('');
+const nameError = ref('');
+const surnameError = ref('');
+const emailError = ref('');
 const router = useRouter();
 
+const validateName = (value: string) => /^[a-zA-Z]+$/.test(value);
+const validatePhoneNumber = (value: string) => /^\+?\d+$/.test(value);  // Optional "+" at the beginning
+const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+
 const register = async () => {
+  // Clear previous errors
+  errorMessage.value = '';
+  phoneError.value = '';
+  nameError.value = '';
+  surnameError.value = '';
+  emailError.value = '';
+
+  // Name validation
+  if (!validateName(name.value)) {
+    nameError.value = 'Name must contain only letters.';
+    return;
+  }
+
+  // Surname validation
+  if (!validateName(surname.value)) {
+    surnameError.value = 'Surname must contain only letters.';
+    return;
+  }
+
+  // Phone number validation (if provided)
+  if (phoneNumber.value && !validatePhoneNumber(phoneNumber.value)) {
+    phoneError.value = 'Phone number must contain only numbers and may start with a "+".';
+    return;
+  }
+
+  // Email validation
+  if (!validateEmail(email.value)) {
+    emailError.value = 'Please enter a valid email (e.g. name@example.com).';
+    return;
+  }
+
+  // Password match validation
   if (password.value !== passwordConfirmation.value) {
     errorMessage.value = 'Passwords do not match';
     return;
   }
 
+  // Password length validation
   if (password.value.length < 8) {
     errorMessage.value = 'Password must be at least 8 characters long';
     return;
   }
 
+  // Registration logic
   try {
     const response = await fetch('http://localhost:8000/api/register', {
       method: 'POST',
@@ -112,11 +156,11 @@ const register = async () => {
 
 const goToLogin = () => {
   router.push('/login'); 
-}
+};
 
 const goToHomepage = () => {
   router.push('/'); 
-}
+};
 </script>
 
 <style>
