@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Logout from '@/components/Logout.vue';
 import NavigationBar from '../components/navigationbar/NavBar.vue';
 </script>
 

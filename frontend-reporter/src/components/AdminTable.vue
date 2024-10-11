@@ -1,10 +1,58 @@
 <script setup>
 import ToggleSwitch from 'primevue/toggleswitch';
 import Button from 'primevue/button';
+import { ref, onMounted } from 'vue';
 
-import { inject, onMounted, ref } from 'vue';
+const users = ref([]);
 
-const checked = ref(true);
+const fetchUsers = async () => {
+  try {
+    const response = await fetch('http://localhost:8000/api/users');
+    if (response.ok) {
+      const data = await response.json();
+      users.value = data.map(user => ({
+        ...user,
+        is_admin: Boolean(user.is_admin),
+      }));
+    }
+  } catch (error) {
+    console.error('Error fetching users:', error);
+  }
+};
+
+const toggleAdminStatus = async (user, value) => {
+  try {
+    const response = await fetch(`http://localhost:8000/api/users/${user.id}/toggle-admin`, {
+      method: 'PATCH',
+    });
+    if (response.ok) {
+      user.is_admin = value;
+    } else {
+      console.error('Error toggling admin status');
+    }
+  } catch (error) {
+    console.error('Error toggling admin status:', error);
+  }
+};
+
+const deleteUser = async (userId) => {
+  try {
+    const response = await fetch(`http://localhost:8000/api/users/${userId}`, {
+      method: 'DELETE',
+    });
+    if (response.ok) {
+      users.value = users.value.filter(user => user.id !== userId);
+    } else {
+      console.error('Error deleting user');
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error);
+  }
+};
+
+onMounted(() => {
+  fetchUsers();
+});
 </script>
 
 <template>
@@ -22,13 +70,20 @@ const checked = ref(true);
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b bg-gray-50 text-gray-900">
-            <td class="px-4 py-2 text-center">1</td>
-            <td class="px-4 py-2 text-center">John</td>
-            <td class="px-4 py-2 text-center">Doe</td>
-            <td class="px-4 py-2 text-center">john.doe@example.com</td>
-            <td class="px-4 py-2 text-center"><ToggleSwitch v-model="checked" /></td>
-            <td class="py-2 text-center"><Button class="h-[35px] p-button-danger" icon="pi pi-trash" /></td>
+          <tr v-for="user in users" :key="user.id" class="border-b bg-gray-50 text-gray-900">
+            <td class="px-4 py-2 text-center">{{ user.id }}</td>
+            <td class="px-4 py-2 text-center">{{ user.name }}</td>
+            <td class="px-4 py-2 text-center">{{ user.surname }}</td>
+            <td class="px-4 py-2 text-center">{{ user.email }}</td>
+            <td class="px-4 py-2 text-center">
+              <ToggleSwitch 
+                :model-value="user.is_admin"
+                @update:modelValue="(value) => toggleAdminStatus(user, value)"
+              />
+            </td>
+            <td class="py-2 text-center">
+              <Button class="h-[35px] p-button-danger" icon="pi pi-trash" @click="deleteUser(user.id)" />
+            </td>
           </tr>
         </tbody>
       </table>
