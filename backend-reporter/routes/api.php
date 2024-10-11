@@ -23,6 +23,8 @@ Route::middleware(['web'])->group(function () {
     Route::post('/login', [UserController::class, 'login']);
     Route::post('/logout', [UserController::class, 'logout']);
     Route::get('/user', [UserController::class, 'getUser'])->middleware('auth');
+    Route::post('/update', [UserController::class, 'update']);
+
     
     Route::get('/users', [UserController::class, 'index']);
     Route::delete('/users/{user}', [UserController::class, 'destroy']);

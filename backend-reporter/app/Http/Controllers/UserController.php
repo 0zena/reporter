@@ -65,6 +65,31 @@ class UserController extends Controller
         return response()->json(['user' => Auth::user()], 200);
     }
 
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'phone_number' => 'nullable|string|max:17',
+            'password' => 'nullable|string|min:8|confirmed',
+        ]);
+
+        // Update user details
+        $user->update([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'password' => $request->password ? Hash::make($request->password) : $user->password,
+        ]);
+
+        return response()->json(['message' => 'Profile updated successfully', 'user' => $user], 200);
+    }
+
+
     public function index()
     {
         return User::all();
