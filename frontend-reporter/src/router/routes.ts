@@ -6,6 +6,7 @@ import NotFound from "@/views/errors/NotFoundView.vue";
 import Exports from "@/views/Exports.vue";
 import HomePage from "@/views/HomePage.vue";
 import Admin from "@/views/Admin.vue";
+import VacancyEditor from '@/views/VacancyEditor.vue';
 
 const routes = [ 
     { path: '/', name: 'home', component: HomePage },
@@ -16,6 +17,7 @@ const routes = [
     { path: '/register', name: 'register', component: RegisterView },
     { path: '/exports', name: 'exports', component: Exports },
     { path: '/admin', name: 'admin', component: Admin },
+    { path: '/editor', name: 'editor', component: VacancyEditor },
     { path: '/:catchAll(.*)', name: 'NotFound', component: NotFound}
 ]
 
