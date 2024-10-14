@@ -11,6 +11,7 @@
             <a href="#" class="relative text-gray-700 link-underline">Vacancies</a>
             <a href="#" class="relative text-gray-700 link-underline">My Vacancies</a>
             <a href="#" class="relative text-gray-700 link-underline">Favorites</a>
+            <button @click="goToCreate" class="relative text-gray-700 link-underline" to="/create">Create</button>
           </div>
         </div>
 
@@ -51,6 +52,9 @@
 import { ref } from 'vue';
 import HeaderButtons from '@/components/HeaderButtons.vue';
 import EditProfileModal from '@/components/EditProfileModal.vue';
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const isEditProfileOpen = ref(false);
 const user = ref(null); // Store user data here
@@ -75,6 +79,10 @@ const closeEditProfile = () => {
 
 // Manage the mobile menu open/close state
 const isOpen = ref(false);
+
+function goToCreate() {
+  router.push('/create');
+}
 </script>
 
 <style scoped>

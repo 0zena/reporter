@@ -59,7 +59,7 @@ const login = async () => {
     if (response.ok) {
       setAuthenticated(true); 
       const data = await response.json();
-      router.push('/vacancies');  // Redirect to vacancies after login
+      await router.push('/vacancies');  // Redirect to vacancies after login
     } else {
       errorMessage.value = 'Invalid email or password';
     }
@@ -78,7 +78,7 @@ onMounted(async () => {
       const data = await response.json();
       if (data.user) {
         setAuthenticated(true); // Set auth state to true if session is valid
-        router.push('/vacancies'); // Redirect if authenticated
+        await router.push('/vacancies'); // Redirect if authenticated
       } else {
         setAuthenticated(false);
       }
@@ -101,11 +101,3 @@ const goToHomepage = () => {
   router.push('/'); 
 }
 </script>
-
-
-
-<style>
-.p-password-input {
-  width: 100%;
-}
-</style>

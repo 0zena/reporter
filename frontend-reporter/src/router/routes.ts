@@ -6,10 +6,12 @@ import NotFound from "@/views/errors/NotFoundView.vue";
 import Exports from "@/views/Exports.vue";
 import HomePage from "@/views/HomePage.vue";
 import Admin from "@/views/Admin.vue";
+import CreateVacancy from "@/views/CreateVacancy.vue";
 
 const routes = [ 
     { path: '/', name: 'home', component: HomePage },
     { path: '/about', name: 'about', component: () => import('../views/AboutView.vue') },
+    { path: '/create', name: 'create', component: CreateVacancy },
     { path: '/vacancies', name: 'vacancies', component:  VacanciesList },
     { path: '/login', name: 'login', component: LoginView },
     { path: '/forgot-password', name: 'forgot-password', component: ForgotPassword },
