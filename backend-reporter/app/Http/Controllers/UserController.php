@@ -77,17 +77,31 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8|confirmed',
         ]);
 
-        // Update user details
+        // Check if current password was provided but new password is missing
+        if ($request->filled('current_password') && !$request->filled('password')) {
+            return response()->json(['message' => 'New password is required if current password is provided'], 400);
+        }
+
+        // Check if the current password was provided and a new password is requested
+        if ($request->filled('password')) {
+            if (!$request->filled('current_password') || !Hash::check($request->current_password, $user->password)) {
+                return response()->json(['message' => 'Current password is incorrect'], 400);
+            }
+
+            $user->password = Hash::make($request->password);
+        }
+
         $user->update([
             'name' => $request->name,
             'surname' => $request->surname,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
-            'password' => $request->password ? Hash::make($request->password) : $user->password,
         ]);
 
         return response()->json(['message' => 'Profile updated successfully', 'user' => $user], 200);
     }
+
+
 
 
     public function index()

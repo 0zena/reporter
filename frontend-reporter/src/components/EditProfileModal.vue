@@ -37,11 +37,9 @@
         <h3 class="text-gray-300 text-xl mb-3 font-semibold">Reset Password</h3>
 
         <!-- Current Password Field -->
-        
-          <label for="current_password" class="block text-sm font-medium text-gray-300">Current Password</label>
-          <Password v-model="currentPassword" id="current_password" toggleMask class="w-full input-password" :feedback="false" />
-          <p v-if="currentPasswordError" class="text-red-500">{{ currentPasswordError }}</p>
-      
+        <label for="current_password" class="block text-sm font-medium text-gray-300">Current Password</label>
+        <Password v-model="currentPassword" id="current_password" toggleMask class="w-full input-password" :feedback="false" />
+        <p v-if="currentPasswordError" class="text-red-500">{{ currentPasswordError }}</p>
 
         <!-- New Password Field -->
         <div class="mb-4 mt-4">
@@ -51,10 +49,9 @@
         </div>
 
         <!-- Confirm New Password Field -->
-          <label for="confirm_password" class="block text-sm font-medium text-gray-300">Confirm New Password</label>
-          <Password v-model="confirmNewPassword" id="confirm_password" toggleMask class="w-full input-password" :feedback="false"/>
-          <p v-if="confirmPasswordError" class="text-red-500">{{ confirmPasswordError }}</p>
-        
+        <label for="confirm_password" class="block text-sm font-medium text-gray-300">Confirm New Password</label>
+        <Password v-model="confirmNewPassword" id="confirm_password" toggleMask class="w-full input-password" :feedback="false"/>
+        <p v-if="confirmPasswordError" class="text-red-500">{{ confirmPasswordError }}</p>
 
         <!-- Save Button -->
         <div class="flex justify-end mt-4">
@@ -88,12 +85,10 @@ const userData = ref({
   password: ''
 });
 
-// Password-related fields
 const currentPassword = ref('');
 const newPassword = ref('');
 const confirmNewPassword = ref('');
 
-// Error messages
 const nameError = ref('');
 const surnameError = ref('');
 const emailError = ref('');
@@ -102,23 +97,20 @@ const currentPasswordError = ref('');
 const newPasswordError = ref('');
 const confirmPasswordError = ref('');
 
-// PrimeVue Toast
 const toast = useToast();
 
-// Watch for user prop changes
 watch(
   () => props.user,
   (newUser) => {
     if (newUser) {
-      userData.value = { ...newUser, password: '' }; // Don't pre-fill password
+      userData.value = { ...newUser, password: '' };
     }
   },
   { immediate: true }
 );
 
-// Validation functions
 const validateName = (value: string) => /^[a-zA-Z]+$/.test(value);
-const validatePhoneNumber = (value: string) => /^\+?\d+$/.test(value);  // Optional "+" at the beginning
+const validatePhoneNumber = (value: string) => /^\+?\d+$/.test(value);
 const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
 const validatePassword = (password: string) => password.length >= 8;
 
@@ -132,30 +124,50 @@ const updateProfile = async () => {
   newPasswordError.value = '';
   confirmPasswordError.value = '';
 
-  // Validate fields
-  if (!userData.value.name) {
-    nameError.value = 'Name is required';
+  // Name validation
+  if (!validateName(userData.value.name)) {
+    nameError.value = 'Name must contain only letters';
     return;
   }
-  if (!userData.value.surname) {
-    surnameError.value = 'Surname is required';
+
+  // Surname validation
+  if (!validateName(userData.value.surname)) {
+    surnameError.value = 'Surname must contain only letters';
     return;
   }
+
+  // Phone number validation (if provided)
+  if (userData.value.phone_number && !validatePhoneNumber(userData.value.phone_number)) {
+    phoneError.value = 'Phone number must contain only numbers and may start with a "+"';
+    return;
+  }
+
+  // Email validation
   if (!validateEmail(userData.value.email)) {
-    emailError.value = 'Invalid email format';
+    emailError.value = 'Please enter a valid email (e.g., name@example.com)';
     return;
   }
-  if (newPassword.value && !validatePassword(newPassword.value)) {
-    newPasswordError.value = 'New password must be at least 8 characters';
+
+  // If current password is entered, new password must also be entered
+  if (currentPassword.value && !newPassword.value) {
+    newPasswordError.value = 'Please provide a new password if you enter your current password';
     return;
   }
-  if (newPassword.value !== confirmNewPassword.value) {
-    confirmPasswordError.value = 'Passwords do not match';
-    return;
-  }
-  if (newPassword.value && !currentPassword.value) {
-    currentPasswordError.value = 'Please provide your current password';
-    return;
+
+  // If new password is provided, confirm the password matches and check length
+  if (newPassword.value) {
+    if (!validatePassword(newPassword.value)) {
+      newPasswordError.value = 'New password must be at least 8 characters';
+      return;
+    }
+    if (newPassword.value !== confirmNewPassword.value) {
+      confirmPasswordError.value = 'Passwords do not match';
+      return;
+    }
+    if (!currentPassword.value) {
+      currentPasswordError.value = 'Please provide your current password';
+      return;
+    }
   }
 
   // Profile update logic here...
@@ -167,16 +179,22 @@ const updateProfile = async () => {
       body: JSON.stringify({
         ...userData.value,
         current_password: currentPassword.value,
-        new_password: newPassword.value,
-        confirm_new_password: confirmNewPassword.value,
+        password: newPassword.value,
+        password_confirmation: confirmNewPassword.value,
       }),
     });
+
     if (response.ok) {
       const data = await response.json();
       toast.add({ severity: 'success', summary: 'Success', detail: 'Profile successfully updated', life: 3000 });
       emit('close');
     } else {
-      toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to update profile', life: 3000 });
+      const errorData = await response.json();
+      if (errorData.message === 'Current password is incorrect') {
+        currentPasswordError.value = errorData.message;
+      } else {
+        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to update profile', life: 3000 });
+      }
     }
   } catch (error) {
     console.error('Failed to update profile', error);
