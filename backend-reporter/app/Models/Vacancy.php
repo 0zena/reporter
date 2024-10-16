@@ -24,6 +24,7 @@ class Vacancy extends Model
 
     public function vacancyImage()
     {
-        return $this->belongsTo(VacancyImage::class);
+        return $this->belongsTo(VacancyImage::class, 'vacancy_image_id');
     }
+
 }
