@@ -50,7 +50,7 @@ class VacanciesController extends Controller
             DB::commit();
 
             return response()->json(['message' => 'Vacancy created successfully', 'vacancy' => $vacancy], 201);
-        
+
         } catch (\Exception $e) {
             // If any error occurs, rollback the transaction
             DB::rollBack();
@@ -72,7 +72,7 @@ class VacanciesController extends Controller
 
     public function index()
     {
-        $vacancies = Vacancy::with('user')->get();
+        $vacancies = Vacancy::with('user', 'vacancyImage')->get();
         return response()->json($vacancies);
     }
 }
