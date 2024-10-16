@@ -4,7 +4,9 @@
       <div class="flex justify-between h-16 px-10 shadow items-center bg-white">
         <!-- Logo and Nav links -->
         <div class="flex items-center space-x-8">
-          <h1 class="text-xl font-bold cursor-pointer text-black">Reporter</h1>
+          <router-link to="/vacancies" class="text-xl font-bold cursor-pointer text-black">
+            Reporter
+          </router-link>
 
           <!-- Desktop Menu -->
           <div class="hidden justify-around space-x-4 md:flex">
