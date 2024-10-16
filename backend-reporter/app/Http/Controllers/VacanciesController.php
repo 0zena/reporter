@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Vacancy;
+use App\Models\VacancyImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -24,12 +25,18 @@ class VacanciesController extends Controller
             $vacancyImage = $path;
         }
 
+        $image = VacancyImage::Create([
+            'image_path' => $vacancyImage,
+        ]);
+
+        $imageID = $image->id;
+
         // Create vacancy
         $vacancy = Vacancy::create([
             'title' => $request->title,
             'description' => $request->description,
             'category' => $request->category,
-            'vacancy_image_id' => $vacancyImage ? $vacancyImage : null,
+            'vacancy_image_id' => $imageID,
             'user_id' => Auth::id(),
         ]);
 
