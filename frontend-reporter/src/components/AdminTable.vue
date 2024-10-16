@@ -56,8 +56,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container mx-10 py-6">
-    <div class="overflow-x-auto">
+  <div class="mx-10 py-6">
+    <div class="">
       <table class="min-w-[1000px] table-auto bg-white rounded-lg shadow-md">
         <thead class="rounded-t-lg">
           <tr class="bg-gray-800 text-white">

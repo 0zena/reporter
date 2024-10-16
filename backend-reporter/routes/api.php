@@ -18,6 +18,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\PDFExportController;
 use App\Http\Controllers\VacanciesController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\SpecialitiesController;
 
 Route::middleware(['web'])->group(function () {
     Route::post('/register', [UserController::class, 'register']);
@@ -37,8 +39,9 @@ Route::middleware(['web'])->group(function () {
     Route::get('/export-user-pdf/{id}', [PDFExportController::class, 'exportUserPDF']);
     Route::get('/export-pdf-test', [PDFExportController::class, 'status']);
 
-    
-
+    Route::post('/categories', [CategoriesController::class, 'store']);
+    Route::get('/categories', [CategoriesController::class, 'index']);
+    Route::post('/specialities', [SpecialitiesController::class, 'store']);
     
     Route::post('/vacancies', [VacanciesController::class, 'store']);
     Route::get('/vacancies', [VacanciesController::class, 'index']);
