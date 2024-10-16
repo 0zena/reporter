@@ -3,6 +3,7 @@ import { defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
 const props = defineProps<{
+  id: number;
   image: string;
   title: string;
   category: string;
@@ -14,9 +15,7 @@ const goToFullScreen = () => {
   router.push({
     name: 'vacancy-fullscreen',
     query: {
-      image: props.image,
-      title: props.title,
-      category: props.category,
+      id: props.id,
     },
   });
 };
