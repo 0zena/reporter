@@ -6,14 +6,12 @@ import NavigationBar from '../components/navigationbar/NavBar.vue';
 const route = useRoute();
 const router = useRouter();
 
-// Vacancy data ref
 const vacancy = ref({
   title: '',
   description: '',
   category: '',
 });
 
-// Function to fetch vacancy data by ID using fetch API
 const fetchVacancy = async (id: string | string[] | undefined) => {
   if (id) {
     try {
@@ -22,7 +20,6 @@ const fetchVacancy = async (id: string | string[] | undefined) => {
         throw new Error('Failed to fetch vacancy');
       }
       const data = await response.json();
-      console.log('Fetched Vacancy Data:', data); // Debugging
       vacancy.value = data;
     } catch (error) {
       console.error('Error fetching vacancy:', error);
@@ -30,13 +27,11 @@ const fetchVacancy = async (id: string | string[] | undefined) => {
   }
 };
 
-// Fetch vacancy when component is mounted
 onMounted(() => {
   const id = route.params.id || route.query.id;
   fetchVacancy(id);
 });
 
-// Function to go back to the previous page
 const goBack = () => {
   router.back();
 };
@@ -51,7 +46,6 @@ const goBack = () => {
     <div class="mt-6">
       <h1 class="text-3xl font-bold text-black mb-2">{{ vacancy.title }}</h1>
       <p class="text-lg italic text-black mb-1">{{ vacancy.category }}</p>
-      <!-- Use v-html to render HTML content in description -->
       <div class="text-base text-black leading-relaxed" v-html="vacancy.description"></div>
     </div>
     <button 
