@@ -101,6 +101,24 @@ class UserController extends Controller
         return response()->json(['message' => 'Profile updated successfully', 'user' => $user], 200);
     }
 
+    public function deleteAccount(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        $user = Auth::user();
+
+        // Check if the password matches
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'Password is incorrect'], 400);
+        }
+
+        // Delete the user's account
+        $user->delete();
+
+        return response()->json(['message' => 'User account deleted successfully'], 200);
+    }
 
 
 
