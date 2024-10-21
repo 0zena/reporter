@@ -86,6 +86,7 @@ class VacanciesController extends Controller
             'description' => $vacancy->description,
             'category' => $vacancy->category,
             'image' => $vacancy->vacancy_image_url,
+            'owner' => $vacancy->user_id,
         ], 200);
     }
 }
