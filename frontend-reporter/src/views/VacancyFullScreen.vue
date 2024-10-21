@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import NavigationBar from '../components/navigationbar/NavBar.vue';
+import axios from 'axios';
 
 import Button from 'primevue/button';
 
@@ -12,9 +13,10 @@ const vacancy = ref({
   title: '',
   description: '',
   category: '',
+  owner: '',
 });
 
-const id = ref();
+var id = ref("");
 
 const fetchVacancy = async (id: string | string[] | undefined) => {
   if (id) {
@@ -52,7 +54,7 @@ const downloadPDF = async (id) => {
 };
 
 onMounted(() => {
-  const id = route.params.id || route.query.id;
+  id = route.params.id || route.query.id;
   fetchVacancy(id);
 });
 
@@ -78,7 +80,7 @@ const goBack = () => {
       class="mt-4 !bg-blue-600 hover:!bg-blue-500 !border-blue-600 hover:!border-blue-500"
     />
     <Button 
-      @click="downloadPDF(id)" 
+      @click="downloadPDF(vacancy.owner)" 
       icon="pi pi-download"
       label="Get contact info"
       class="mx-2 mt-4"
