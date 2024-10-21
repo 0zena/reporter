@@ -19,8 +19,8 @@ class VacanciesController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category_id' => 'required|integer|exists:categories,id',
-            'speciality_id' => 'nullable|integer|exists:specialities,id',
+            'category_id' => 'required|exists:categories,id',
+            'speciality_id' => 'nullable|exists:specialities,id',
             'vacancy_image' => 'nullable|image|max:2048',
         ]);
 
@@ -45,8 +45,8 @@ class VacanciesController extends Controller
             $vacancy = Vacancy::create([
                 'title' => $request->title,
                 'description' => $request->description,
-                'category_id' => $request->category_id,
-                'speciality_id' => $request->speciality_id,
+                'category_id' => $request->category_id, // Store category_id as a foreign key
+                'speciality_id' => $request->speciality_id, // Store speciality_id as a foreign key
                 'vacancy_image_id' => $imageID,
                 'user_id' => Auth::id(),
             ]);
@@ -72,13 +72,26 @@ class VacanciesController extends Controller
 
     public function index()
     {
-        $vacancies = Vacancy::with('user', 'vacancyImage')->get();
+        $vacancies = Vacancy::with(['user', 'vacancyImage', 'category', 'speciality'])->get();
+
+        // Transform the data to include names instead of ids
+        $vacancies->transform(function ($vacancy) {
+            return [
+                'id' => $vacancy->id,
+                'title' => $vacancy->title,
+                'description' => $vacancy->description,
+                'vacancy_image' => $vacancy->vacancyImage,
+                'category' => $vacancy->category->name, // Get category name
+                'speciality' => $vacancy->speciality ? $vacancy->speciality->name : null, // Get speciality name if it exists
+            ];
+        });
+
         return response()->json($vacancies);
     }
 
     public function show($id)
     {
-        $vacancy = Vacancy::with('vacancyImage')->find($id);
+        $vacancy = Vacancy::with(['vacancyImage', 'category', 'speciality'])->find($id);
 
         if (!$vacancy) {
             return response()->json(['error' => 'Vacancy not found'], 404);
@@ -89,8 +102,8 @@ class VacanciesController extends Controller
         return response()->json([
             'title' => $vacancy->title,
             'description' => $vacancy->description,
-            'category' => $vacancy->category,
-            'speciality' => $vacancy->speciality,
+            'category' => $vacancy->category->name, // Get category name
+            'speciality' => $vacancy->speciality ? $vacancy->speciality->name : null, // Get speciality name if it exists
             'image' => $vacancy->vacancy_image_url,
         ], 200);
     }

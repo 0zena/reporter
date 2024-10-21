@@ -32,4 +32,15 @@ class SpecialitiesController extends Controller
 
         return response()->json($specialities, 200);
     }
+
+    public function getByCategory($categoryId)
+    {
+        $specialities = Speciality::where('category_id', $categoryId)->get();
+
+        if ($specialities->isEmpty()) {
+            return response()->json(['message' => 'No specialities found for this category'], 404);
+        }
+
+        return response()->json($specialities, 200);
+    }
 }
