@@ -10,9 +10,9 @@
 
           <!-- Desktop Menu -->
           <div class="hidden justify-around space-x-4 md:flex">
-            <a href="#" class="relative text-gray-700 link-underline">Vacancies</a>
-            <a href="#" class="relative text-gray-700 link-underline">My Vacancies</a>
-            <a href="#" class="relative text-gray-700 link-underline">Favorites</a>
+            <router-link class="relative text-gray-700 link-underline" to="/vacancies">Vacancies</router-link>
+            <router-link class="relative text-gray-700 link-underline" to="/#">My Vacancies</router-link>
+            <router-link class="relative text-gray-700 link-underline" to="/#">Favorites</router-link>
           </div>
         </div>
 
