@@ -49,6 +49,9 @@ Route::middleware(['web'])->group(function () {
     Route::get('/vacancies/{id}', [VacanciesController::class, 'show']);
     Route::post('/vacancies', [VacanciesController::class, 'store']);
     Route::get('/vacancies', [VacanciesController::class, 'index']);
+
+    Route::get('/categories', [CategoriesController::class, 'index']);
+    Route::get('/specialities/category/{categoryId}', [SpecialitiesController::class, 'getByCategory']);
 });
 
 
