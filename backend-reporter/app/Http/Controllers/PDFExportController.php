@@ -10,13 +10,9 @@ class PDFExportController extends Controller
 {
     public function exportUserPDF($id)
     {
-        // Fetch the user data by ID
         $user = User::findOrFail($id);
 
-        // Load the view and pass the user data to it
         $pdf = PDF::loadView('pdf.user', compact('user'));
-
-        // Download the PDF
         return $pdf->download('user_' . $user->id . '_details.pdf');
     }
 
