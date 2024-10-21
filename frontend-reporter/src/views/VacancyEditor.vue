@@ -12,7 +12,7 @@ const title = ref('');
 const description = ref('');
 const category = ref('');
 const src = ref(null);
-const file = ref<File | null>(null);
+const file = ref(null);
 const errorMessage = ref('');
 const successMessage = ref('');
 

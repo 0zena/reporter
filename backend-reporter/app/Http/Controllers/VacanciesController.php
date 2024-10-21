@@ -17,6 +17,7 @@ class VacanciesController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'category' => 'required|string',
+            'speciality' => 'nullable|string',
             'vacancy_image' => 'nullable|image|max:2048',
         ]);
 
@@ -42,6 +43,7 @@ class VacanciesController extends Controller
                 'title' => $request->title,
                 'description' => $request->description,
                 'category' => $request->category,
+                'speciality' => $request->speciality,
                 'vacancy_image_id' => $imageID,
                 'user_id' => Auth::id(),
             ]);
@@ -85,6 +87,7 @@ class VacanciesController extends Controller
             'title' => $vacancy->title,
             'description' => $vacancy->description,
             'category' => $vacancy->category,
+            'speciality' => $vacancy->speciality,
             'image' => $vacancy->vacancy_image_url,
         ], 200);
     }
