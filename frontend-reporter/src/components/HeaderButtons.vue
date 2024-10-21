@@ -8,7 +8,7 @@
     <div v-else>
       <!-- Show login and register buttons if the user is not logged in -->
       <Button label="Login" class="p-button-info mr-2" @click="goToLogin" />
-      <Button label="Register" class="p-button-success" @click="goToRegister" />
+      <Button label="Register" class="p-button" @click="goToRegister" />
     </div>
 
     <!-- Modal for editing profile -->

@@ -9,8 +9,8 @@
         <p class="mt-6 text-lg leading-8 text-gray-600">
           Search through a variety of job listings across different categories.
         </p>
-        <div class="p-button mt-10 flex items-center justify-center gap-x-6">
-          <router-link to="/login">
+        <div>
+          <router-link class="p-button mt-10 flex items-center justify-center gap-x-6" to="/login">
             Get Started
           </router-link>
         </div>
