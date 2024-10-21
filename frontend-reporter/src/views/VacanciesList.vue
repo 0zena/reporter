@@ -74,7 +74,7 @@ const filteredVacancies = computed(() => {
             v-for="(vacancy, index) in filteredVacancies" 
             :key="index" 
             :id="vacancy.id"
-            :image="vacancy.vacancy_image ? 'http://127.0.0.1:8000/storage/' + vacancy.vacancy_image.image_path : '/default-image.png'" 
+            :image="vacancy.vacancy_image ? 'http://127.0.0.1:8000/storage/' + vacancy.vacancy_image.image_path : undefined" 
             :title="vacancy.title" 
             :category="vacancy.category"
           />

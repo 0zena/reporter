@@ -24,20 +24,25 @@ class VacanciesController extends Controller
 
         try {
             $vacancyImage = null;
+            $image = null;
+            $imageID = null;
+
             if ($request->hasFile('vacancy_image')) {
                 $path = $request->file('vacancy_image')->store('vacancy_images', 'public');
                 $vacancyImage = $path;
-            }
 
-            $image = VacancyImage::create([
-                'image_path' => $vacancyImage,
-            ]);
+                $image = VacancyImage::create([
+                    'image_path' => $vacancyImage,
+                ]);
+
+                $imageID = $image->id;
+            }
 
             $vacancy = Vacancy::create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'category' => $request->category,
-                'vacancy_image_id' => $image->id,
+                'vacancy_image_id' => $imageID,
                 'user_id' => Auth::id(),
             ]);
 
