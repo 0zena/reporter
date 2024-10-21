@@ -4,15 +4,15 @@
       <div class="flex justify-between h-16 px-10 shadow items-center bg-white">
         <!-- Logo and Nav links -->
         <div class="flex items-center space-x-8">
-          <router-link to="/vacancies" class="text-xl font-bold cursor-pointer text-black">
+          <router-link to="/" class="text-xl font-bold cursor-pointer text-black">
             Reporter
           </router-link>
 
           <!-- Desktop Menu -->
           <div class="hidden justify-around space-x-4 md:flex">
-            <a href="#" class="relative text-gray-700 link-underline">Vacancies</a>
-            <a href="#" class="relative text-gray-700 link-underline">My Vacancies</a>
-            <a href="#" class="relative text-gray-700 link-underline">Favorites</a>
+            <router-link class="relative text-gray-700 link-underline" to="/vacancies">Vacancies</router-link>
+            <router-link class="relative text-gray-700 link-underline" to="/#">My Vacancies</router-link>
+            <router-link class="relative text-gray-700 link-underline" to="/#">Favorites</router-link>
           </div>
         </div>
 
