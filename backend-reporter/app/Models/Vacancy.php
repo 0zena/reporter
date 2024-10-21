@@ -13,6 +13,7 @@ class Vacancy extends Model
         'title',
         'description',
         'category',
+        'speciality',
         'vacancy_image_id',
         'user_id',
     ];

@@ -5,6 +5,8 @@ import InputText from 'primevue/inputtext';
 import FileUpload from 'primevue/fileupload';
 import Button from 'primevue/button';
 import Select from 'primevue/select';
+import Skeleton from 'primevue/skeleton';
+
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -34,7 +36,7 @@ const fetchCategories = async () => {
 
 const fetchSpecialities = async (categoryId) => {
     try {
-        const response = await fetch(`http://localhost:8000/api/specialities/category/${categoryId}`);
+        const response = await fetch(`http://localhost:8000/api/specialities/${categoryId}`);
         if (response.ok) {
             specialities.value = await response.json();
         } else {
@@ -78,7 +80,6 @@ async function submitVacancy() {
     formData.append('description', description.value);
     formData.append('category_id', selectedCategoryId.value);
     formData.append('speciality_id', selectedSpecialityId.value);
-
     if (file.value) {
         formData.append('vacancy_image', file.value);
     }

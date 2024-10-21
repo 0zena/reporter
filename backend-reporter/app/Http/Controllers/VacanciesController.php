@@ -13,11 +13,14 @@ class VacanciesController extends Controller
 {
     public function store(Request $request)
     {
+        $userId = Auth::id();
+        dd($userId);
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'category' => 'required|string',
-            'speciality' => 'nullable|string',
+            'category_id' => 'required|integer|exists:categories,id',
+            'speciality_id' => 'nullable|integer|exists:specialities,id',
             'vacancy_image' => 'nullable|image|max:2048',
         ]);
 
@@ -42,8 +45,8 @@ class VacanciesController extends Controller
             $vacancy = Vacancy::create([
                 'title' => $request->title,
                 'description' => $request->description,
-                'category' => $request->category,
-                'speciality' => $request->speciality,
+                'category_id' => $request->category_id,
+                'speciality_id' => $request->speciality_id,
                 'vacancy_image_id' => $imageID,
                 'user_id' => Auth::id(),
             ]);
