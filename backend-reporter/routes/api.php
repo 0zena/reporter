@@ -44,7 +44,9 @@ Route::middleware(['web'])->group(function () {
 
     Route::post('/categories', [CategoriesController::class, 'store']);
     Route::get('/categories', [CategoriesController::class, 'index']);
+
     Route::post('/specialities', [SpecialitiesController::class, 'store']);
+    Route::get('/specialities/{categoryId}', [SpecialitiesController::class, 'getByCategory']);
 
     Route::get('/vacancies/{id}', [VacanciesController::class, 'show']);
     Route::post('/vacancies', [VacanciesController::class, 'store']);

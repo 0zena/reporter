@@ -7,6 +7,7 @@ const props = defineProps<{
   image?: string;
   title: string;
   category: string;
+  speciality: string;
 }>();
 
 const router = useRouter();
@@ -35,7 +36,7 @@ const goToFullScreen = () => {
     </div>
     <div id="text-wrapper" class="text-black">
       <h1 id="title" class="text-2xl font-bold">{{ props.title }}</h1>
-      <p id="category">{{ props.category }}</p>
+      <p id="category">{{ props.category }} - {{ props.speciality }}</p>
     </div>
   </div>
 </template>

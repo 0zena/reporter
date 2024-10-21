@@ -77,6 +77,7 @@ const filteredVacancies = computed(() => {
             :image="vacancy.vacancy_image ? 'http://127.0.0.1:8000/storage/' + vacancy.vacancy_image.image_path : undefined" 
             :title="vacancy.title" 
             :category="vacancy.category"
+            :speciality="vacancy.speciality"
           />
         </div>
         <p v-else>No vacancies found.</p>

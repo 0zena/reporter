@@ -21,4 +21,15 @@ class SpecialitiesController extends Controller
 
         return response()->json($speciality, 201); // Return the created speciality with a 201 status code
     }
+
+    public function getByCategory($categoryId)
+    {
+        $specialities = Speciality::where('category_id', $categoryId)->get();
+
+        if ($specialities->isEmpty()) {
+            return response()->json(['message' => 'No specialities found for this category'], 404);
+        }
+
+        return response()->json($specialities, 200);
+    }
 }

@@ -3,20 +3,59 @@ import NavigationBar from '../components/navigationbar/NavBar.vue';
 import Editor from 'primevue/editor';
 import InputText from 'primevue/inputtext';
 import Skeleton from 'primevue/skeleton';
+import Select from 'primevue/select';
 import FileUpload from 'primevue/fileupload';
 import Button from 'primevue/button';
-import { ref } from 'vue';
+
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 const title = ref('');
 const description = ref('');
 const category = ref('');
+const speciality = ref(null);
 const src = ref(null);
-const file = ref<File | null>(null);
+const file = ref(null);
 const errorMessage = ref('');
 const successMessage = ref('');
+const selectedCategoryId = ref(null);
+const categories = ref([]);
+const specialities = ref([]);
 
 const router = useRouter();
+
+const fetchCategories = async () => {
+    try {
+        const response = await fetch('http://localhost:8000/api/categories');
+        if (response.ok) {
+            categories.value = await response.json();
+        }
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+    }
+};
+
+const fetchSpecialities = async (categoryId) => {
+    try {
+        const response = await fetch(`http://localhost:8000/api/specialities/${categoryId}`);
+        if (response.ok) {
+            specialities.value = await response.json();
+        } else {
+            specialities.value = [];
+        }
+    } catch (error) {
+        console.error('Error fetching specialities:', error);
+        specialities.value = [];
+    }
+};
+
+watch(selectedCategoryId, (newCategoryId) => {
+    if (newCategoryId) {
+        fetchSpecialities(newCategoryId);
+    } else {
+        specialities.value = [];
+    }
+});
 
 function onFileSelect(event) {
     file.value = event.files[0];
@@ -30,7 +69,7 @@ function onFileSelect(event) {
 }
 
 async function submitVacancy() {
-    if (!title.value || !description.value || !category.value) {
+    if (!title.value || !description.value || !selectedCategoryId.value) {
         errorMessage.value = "All fields are required.";
         return;
     }
@@ -38,10 +77,15 @@ async function submitVacancy() {
     const formData = new FormData();
     formData.append('title', title.value);
     formData.append('description', description.value);
-    formData.append('category', category.value);
+    formData.append('category_id', selectedCategoryId.value);
+    formData.append('speciality_id', speciality.value);
 
     if (file.value) {
         formData.append('vacancy_image', file.value);
+    }
+
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
     }
 
     try {
@@ -63,6 +107,10 @@ async function submitVacancy() {
         errorMessage.value = "An error occurred. Please try again later.";
     }
 }
+
+onMounted(() => {
+  fetchCategories();
+});
 </script>
 
 <template>
@@ -78,7 +126,26 @@ async function submitVacancy() {
             </div>
     
             <InputText v-model="title" type="text" size="large" class="w-[750px] my-5 block" placeholder="Title" />
-            <InputText v-model="category" type="text" size="large" class="w-[750px] my-5" placeholder="Category" />
+
+            <div class="flex flex-col w-[750px] my-5">
+                <Select
+                    v-model="selectedCategoryId"
+                    :options="categories"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="Select a Category"
+                    class="mb-5"
+                />
+    
+                <Select
+                    v-model="speciality"
+                    :options="specialities"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="Select a Speciality"
+                    :disabled="!selectedCategoryId"
+                />
+            </div>
     
             <Editor v-model="description" editorStyle="height: 320px" class="my-5 w-[850px]">
                 <template v-slot:toolbar>
