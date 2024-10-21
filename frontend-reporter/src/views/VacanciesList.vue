@@ -14,6 +14,7 @@ import InputIcon from 'primevue/inputicon';
 const router = useRouter();
 const vacancies = ref([]);
 const searchTerm = ref('');
+const selectedSortOption = ref('');
 
 const goToEditor = () => {
   router.push('/editor');
@@ -36,15 +37,37 @@ onMounted(() => {
   fetchVacancies();
 });
 
-// Computed property for filtered vacancies
-const filteredVacancies = computed(() => {
-  if (!searchTerm.value.trim()) {
-    return vacancies.value;
+const sortVacancies = (vacanciesArray: any[]) => {
+  switch (selectedSortOption.value) {
+    case 'name-asc':
+      return vacanciesArray.sort((a, b) => a.title.localeCompare(b.title));
+    case 'name-desc':
+      return vacanciesArray.sort((a, b) => b.title.localeCompare(a.title));
+    case 'category-asc':
+      return vacanciesArray.sort((a, b) => a.category.localeCompare(b.category));
+    case 'category-desc':
+      return vacanciesArray.sort((a, b) => b.category.localeCompare(a.category));
+    case 'date-newest':
+      return vacanciesArray.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()); // Sort by newest
+    case 'date-oldest':
+      return vacanciesArray.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()); // Sort by oldest
+    default:
+      return vacanciesArray;
   }
-  const term = searchTerm.value.toLowerCase();
-  return vacancies.value.filter((vacancy: any) =>
-    vacancy.title.toLowerCase().includes(term)
-  );
+};
+
+
+const filteredVacancies = computed(() => {
+  let filtered = vacancies.value;
+  
+  if (searchTerm.value.trim()) {
+    const term = searchTerm.value.toLowerCase();
+    filtered = filtered.filter((vacancy: any) =>
+      vacancy.title.toLowerCase().includes(term)
+    );
+  }
+  
+  return sortVacancies(filtered);
 });
 </script>
 
@@ -63,6 +86,20 @@ const filteredVacancies = computed(() => {
             class="w-full px-4 py-2 rounded-md border border-gray-300 text-black"
           />
         </IconField>
+
+        <div class="mt-4">
+          <h3 class="text-lg text-black font-semibold mb-2">Sort by:</h3>
+          <select v-model="selectedSortOption" class="w-full px-4 py-2 rounded-md border border-gray-300 text-black">
+            <option value="">Default</option>
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+            <option value="category-asc">Category (A-Z)</option>
+            <option value="category-desc">Category (Z-A)</option>
+            <option value="date-newest">Newest</option>
+            <option value="date-oldest">Oldest</option>
+
+          </select>
+        </div>
 
       </div>
 
