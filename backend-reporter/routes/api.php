@@ -34,6 +34,7 @@ Route::middleware(['web'])->group(function () {
 
     Route::get('/favorites/{vacancyId}', [FavoritesController::class, 'isFavorited'])->middleware('auth');
     Route::post('/favorites/{vacancyId}', [FavoritesController::class, 'toggleFavorite'])->middleware('auth');
+    Route::get('/get-favorites', [FavoritesController::class, 'getFavoritedVacancies'])->middleware('auth');
 });
 
 Route::get('/users', [UserController::class, 'index']);
