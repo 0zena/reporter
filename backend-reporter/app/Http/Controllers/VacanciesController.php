@@ -13,9 +13,6 @@ class VacanciesController extends Controller
 {
     public function store(Request $request)
     {
-        $userId = Auth::id();
-        dd($userId);
-
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
