@@ -136,7 +136,7 @@ const resetFilters = () => {
     <NavigationBar></NavigationBar>
     <div id="main" class="w-full h-auto min-h-full flex flex-row-reverse">
 
-      <div id="menu" class="bg-zinc-400 w-[350px] h-[calc(100vh-64px)] p-4">
+      <div id="menu" class="bg-zinc-400 w-[350px] min-h-[calc(100vh-64px)] p-4">
 
         <IconField class="mt-5 ">
           <InputIcon class="pi pi-search" />

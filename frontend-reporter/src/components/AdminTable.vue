@@ -82,7 +82,7 @@ onMounted(() => {
               />
             </td>
             <td class="py-2 text-center">
-              <Button class="h-[35px] p-button-danger" icon="pi pi-trash" @click="deleteUser(user.id)" />
+              <Button class="p-button-danger h-[35px]" icon="pi pi-trash" @click="deleteUser(user.id)" />
             </td>
           </tr>
         </tbody>

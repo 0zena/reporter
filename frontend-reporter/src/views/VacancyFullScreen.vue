@@ -16,9 +16,47 @@ const vacancy = ref({
   owner: '',
 });
 
+const isFavorited = ref(false);
+
 var id = ref("");
-const isAdmin = ref(false); // Local ref to manage admin status
-const currentUserId = ref(null); // Added this line
+const isAdmin = ref(false);
+const currentUserId = ref(null);
+
+const checkIfFavorited = async () => {
+  try {
+    const response = await fetch(`http://localhost:8000/api/favorites/${id}`, {
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to check favorite status');
+    }
+
+    const data = await response.json();
+    isFavorited.value = data.isFavorited;
+  } catch (error) {
+    console.error('Error checking favorite status:', error);
+  }
+};
+
+const toggleFavorite = async () => {
+  try {
+    const response = await fetch(`http://localhost:8000/api/favorites/${id}`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to toggle favorite status');
+    }
+
+    const data = await response.json();
+    isFavorited.value = !isFavorited.value;
+  } catch (error) {
+    console.error('Error toggling favorite status:', error);
+  }
+};
+
 
 onMounted(async () => {
   try {
@@ -49,7 +87,7 @@ onMounted(async () => {
 const fetchVacancy = async (id: string | string[] | undefined) => {
   if (id) {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/vacancies/${id}`);
+      const response = await fetch(`http://localhost:8000/api/vacancies/${id}`);
       if (!response.ok) {
         throw new Error('Failed to fetch vacancy');
       }
@@ -63,7 +101,7 @@ const fetchVacancy = async (id: string | string[] | undefined) => {
 
 const downloadPDF = async (id) => {
   try {
-    const response = await axios.get(`http://127.0.0.1:8000/api/export-user-pdf/${id}`, {
+    const response = await axios.get(`http://localhost:8000/api/export-user-pdf/${id}`, {
       responseType: 'blob',
     });
 
@@ -93,9 +131,11 @@ const deleteVacancy = async () => {
   }
 };
 
+
 onMounted(() => {
   id = route.params.id || route.query.id;
   fetchVacancy(id);
+  checkIfFavorited();
 });
 
 const goBack = () => {
@@ -115,11 +155,23 @@ const canDelete = computed(() => {
 <template>
   <NavigationBar />
   <div class="max-w-5xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-3">
+
     <div id="image-wrapper" class="flex">
       <img v-if="vacancy.image" :src="`http://127.0.0.1:8000${vacancy.image}`" alt="Vacancy Image" class="w-full h-[200px] object-cover object-[0_30%] mb-4">
     </div>
     <div class="mt-6">
-      <h1 class="text-3xl font-bold text-black mb-2">{{ vacancy.title }}</h1>
+      <div class="flex justify-between">
+        <h1 class="text-3xl font-bold text-black mb-2">{{ vacancy.title }}</h1>
+        <Button 
+          id="fav-button"
+          :icon="isFavorited ? 'pi pi-star-fill' : 'pi pi-star'" 
+          @click="toggleFavorite"
+          severity="help"
+          text
+          rounded
+          style="font-size: 2rem !important;"
+        />
+      </div>
       <p class="text-lg italic text-black mb-1">{{ vacancy.category }}</p>
       <div class="text-base text-black leading-relaxed" v-html="vacancy.description"></div>
     </div>
@@ -147,3 +199,8 @@ const canDelete = computed(() => {
   </div>
 </template>
 
+<style>
+#fav-button>span {
+  font-size: 1.5rem !important;
+}
+</style>

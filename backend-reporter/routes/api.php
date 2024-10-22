@@ -20,6 +20,7 @@ use App\Http\Controllers\PDFExportController;
 use App\Http\Controllers\VacanciesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\SpecialitiesController;
+use App\Http\Controllers\FavoritesController;
 
 Route::middleware(['web'])->group(function () {
     Route::post('/register', [UserController::class, 'register']);
@@ -30,6 +31,10 @@ Route::middleware(['web'])->group(function () {
     Route::post('/delete-account', [UserController::class, 'deleteAccount']);
 
     Route::post('/vacancies', [VacanciesController::class, 'store'])->middleware('auth');
+
+    Route::get('/favorites/{vacancyId}', [FavoritesController::class, 'isFavorited'])->middleware('auth');
+    Route::post('/favorites/{vacancyId}', [FavoritesController::class, 'toggleFavorite'])->middleware('auth');
+    Route::get('/get-favorites', [FavoritesController::class, 'getFavoritedVacancies'])->middleware('auth');
 });
 
 Route::get('/users', [UserController::class, 'index']);
