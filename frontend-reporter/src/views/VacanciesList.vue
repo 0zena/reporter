@@ -85,18 +85,14 @@ const filteredVacancies = computed(() => {
     );
   }
 
-  // Filter by selected category (use category_id instead of name)
-  if (selectedCategoryId.value) {
-    filtered = filtered.filter(vacancy => 
-      vacancy.category_id === selectedCategoryId.value
-    );
+ // Filter by category if a category is selected
+ if (selectedCategoryId.value !== null) {
+    filtered = filtered.filter(vacancy => vacancy.category_id === selectedCategoryId.value);
   }
 
-  // Filter by selected speciality (use speciality_id instead of name)
-  if (selectedSpecialityId.value) {
-    filtered = filtered.filter(vacancy => 
-      vacancy.speciality_id === selectedSpecialityId.value
-    );
+  // Filter by speciality if a speciality is selected
+  if (selectedSpecialityId.value !== null) {
+    filtered = filtered.filter(vacancy => vacancy.speciality_id === selectedSpecialityId.value);
   }
 
   return filtered;
@@ -125,6 +121,14 @@ const sortedVacancies = computed(() => {
 
   return sortedList;
 });
+
+// Function to reset all filters and sorting
+const resetFilters = () => {
+  selectedSortOption.value = '';
+  selectedCategoryId.value = null;
+  selectedSpecialityId.value = null;
+  searchTerm.value = '';
+};
 </script>
 
 <template>
@@ -162,7 +166,7 @@ const sortedVacancies = computed(() => {
            <p class="text-black">Categories</p>
           <Select
             v-model="selectedCategoryId"
-            :options="categories"
+            :options="[{ id: null, name: 'All' }, ...categories]"
             optionLabel="name"
             optionValue="id"
             placeholder="Select Category"
@@ -173,15 +177,18 @@ const sortedVacancies = computed(() => {
           <p class="text-black">Specialities</p>
           <Select
             v-model="selectedSpecialityId"
-            :options="specialities"
+            :options="[{ id: null, name: 'All' }, ...specialities]"
             optionLabel="name"
             optionValue="id"
             placeholder="Select Speciality"
             :disabled="!selectedCategoryId"
             class="w-full mb-4"
           />
+
         </div>
-        
+
+        <Button label="Reset Filters" class="w-full" @click="resetFilters" />
+
       </div>
 
       <Button icon="pi pi-plus" class="h-10 m-5" style="width: 3rem;" @click="goToEditor"/>
