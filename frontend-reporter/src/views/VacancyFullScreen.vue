@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import NavigationBar from '../components/navigationbar/NavBar.vue';
 import axios from 'axios';
@@ -18,6 +18,7 @@ const vacancy = ref({
 
 var id = ref("");
 const isAdmin = ref(false); // Local ref to manage admin status
+const currentUserId = ref(null); // Added this line
 
 onMounted(async () => {
   try {
@@ -29,7 +30,8 @@ onMounted(async () => {
       const data = await response.json();
 
       if (data.user) {
-  
+        currentUserId.value = data.user.id; // Store current user's ID
+
         if (data.user['is_admin'] === 1) {
           isAdmin.value = true;
         } else {
@@ -60,23 +62,23 @@ const fetchVacancy = async (id: string | string[] | undefined) => {
 };
 
 const downloadPDF = async (id) => {
-    try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/export-user-pdf/${id}`, {
-            responseType: 'blob',
-        });
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/api/export-user-pdf/${id}`, {
+      responseType: 'blob',
+    });
 
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
 
-        link.setAttribute('download', `user_${id}_details.pdf`);
+    link.setAttribute('download', `user_${id}_details.pdf`);
 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    } catch (error) {
-        console.error('Error downloading the PDF:', error);
-    }
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error('Error downloading the PDF:', error);
+  }
 };
 
 const deleteVacancy = async () => {
@@ -99,6 +101,15 @@ onMounted(() => {
 const goBack = () => {
   router.back();
 };
+
+const canDelete = computed(() => {
+  if (currentUserId.value && vacancy.value.owner) {
+    const userId = String(currentUserId.value);
+    const ownerId = String(vacancy.value.owner);
+    return isAdmin.value || userId === ownerId;
+  }
+  return false;
+});
 </script>
 
 <template>
@@ -124,17 +135,15 @@ const goBack = () => {
         label="Get contact info"
         class="mx-2"
       />
-  
-      <div v-if="isAdmin" id="delete-wrapper" class="ml-auto">
+      <div v-if="canDelete" id="delete-wrapper" class="ml-auto">
         <Button 
           @click="deleteVacancy"
           severity="danger"
           icon="pi pi-trash"
           label="Delete"
-          class=""
         />
       </div>
     </div>
-
   </div>
 </template>
+
