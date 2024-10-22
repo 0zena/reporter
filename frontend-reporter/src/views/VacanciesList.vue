@@ -136,7 +136,7 @@ const resetFilters = () => {
     <NavigationBar></NavigationBar>
     <div id="main" class="w-full h-auto min-h-full flex flex-row-reverse">
 
-      <div id="menu-placeholder" class="bg-zinc-400 w-[350px] h-auto min-h-full">
+      <div id="menu" class="bg-zinc-400 w-[350px] h-[calc(100vh-64px)] p-4">
 
         <IconField class="mt-5 ">
           <InputIcon class="pi pi-search" />
@@ -162,7 +162,7 @@ const resetFilters = () => {
         
         <div class="mt-4">
           <h3 class="text-lg text-black font-semibold mb-2">Filter:</h3>
-          <!-- Category Filter -->
+
            <p class="text-black">Categories</p>
           <Select
             v-model="selectedCategoryId"
@@ -173,7 +173,6 @@ const resetFilters = () => {
             class="w-full mb-4"
           />
 
-          <!-- Speciality Filter (Dependent on selected category) -->
           <p class="text-black">Specialities</p>
           <Select
             v-model="selectedSpecialityId"
