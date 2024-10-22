@@ -4,8 +4,6 @@ import AdminTable from "@/components/AdminTable.vue";
 import CategoryEditor from "@/components/CategoryEditor.vue";
 
 import { inject, onMounted, ref } from 'vue';
-const isAuthenticated = inject('isAuthenticated') as any;
-const setAuthenticated = inject('setAuthenticated') as (value: boolean) => void;
 
 const isAdmin = ref(false); // Local ref to manage admin status
 
@@ -19,21 +17,17 @@ onMounted(async () => {
       const data = await response.json();
 
       if (data.user) {
-        setAuthenticated(true);
-
-        
+  
         if (data.user['is_admin'] === 1) {
           isAdmin.value = true;
         } else {
           isAdmin.value = false;
         }
       } else {
-        setAuthenticated(false);
         isAdmin.value = false;
       }
     }
   } catch (error) {
-    setAuthenticated(false);
     isAdmin.value = false;
   }
 });
