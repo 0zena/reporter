@@ -81,8 +81,10 @@ class VacanciesController extends Controller
                 'title' => $vacancy->title,
                 'description' => $vacancy->description,
                 'vacancy_image' => $vacancy->vacancyImage,
-                'category' => $vacancy->category->name, // Get category name
-                'speciality' => $vacancy->speciality ? $vacancy->speciality->name : null, // Get speciality name if it exists
+                'category' => $vacancy->category->name, // Keep category name
+                'category_id' => $vacancy->category->id, // Include category ID
+                'speciality' => $vacancy->speciality ? $vacancy->speciality->name : null, // Keep speciality name if it exists
+                'speciality_id' => $vacancy->speciality ? $vacancy->speciality->id : null, // Include speciality ID if it exists
             ];
         });
 
