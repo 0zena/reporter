@@ -110,4 +110,21 @@ class VacanciesController extends Controller
             'owner' => $vacancy->user_id,
         ], 200);
     }
+
+    public function destroy($id)
+{
+    $vacancy = Vacancy::find($id);
+
+    if (!$vacancy) {
+        return response()->json(['error' => 'Vacancy not found'], 404);
+    }
+
+    if ($vacancy->vacancyImage && Storage::disk('public')->exists($vacancy->vacancyImage->image_path)) {
+        Storage::disk('public')->delete($vacancy->vacancyImage->image_path);
+    }
+
+    $vacancy->delete();
+
+    return response()->json(['message' => 'Vacancy deleted successfully']);
+}
 }

@@ -17,6 +17,32 @@ const vacancy = ref({
 });
 
 var id = ref("");
+const isAdmin = ref(false); // Local ref to manage admin status
+
+onMounted(async () => {
+  try {
+    const response = await fetch('http://localhost:8000/api/user', {
+      credentials: 'include',
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+
+      if (data.user) {
+  
+        if (data.user['is_admin'] === 1) {
+          isAdmin.value = true;
+        } else {
+          isAdmin.value = false;
+        }
+      } else {
+        isAdmin.value = false;
+      }
+    }
+  } catch (error) {
+    isAdmin.value = false;
+  }
+});
 
 const fetchVacancy = async (id: string | string[] | undefined) => {
   if (id) {
@@ -53,6 +79,18 @@ const downloadPDF = async (id) => {
     }
 };
 
+const deleteVacancy = async () => {
+  if (confirm("Are you sure you want to delete this vacancy?")) {
+    try {
+      await axios.delete(`http://127.0.0.1:8000/api/vacancies/${id}`);
+      router.push('/vacancies');
+    } catch (error) {
+      console.error('Error deleting vacancy:', error);
+      alert('Failed to delete vacancy');
+    }
+  }
+};
+
 onMounted(() => {
   id = route.params.id || route.query.id;
   fetchVacancy(id);
@@ -74,17 +112,29 @@ const goBack = () => {
       <p class="text-lg italic text-black mb-1">{{ vacancy.category }}</p>
       <div class="text-base text-black leading-relaxed" v-html="vacancy.description"></div>
     </div>
-    <Button 
-      @click="goBack"
-      label="Back"
-      class="mt-4 !bg-blue-600 hover:!bg-blue-500 !border-blue-600 hover:!border-blue-500"
-    />
-    <Button 
-      @click="downloadPDF(vacancy.owner)" 
-      icon="pi pi-download"
-      label="Get contact info"
-      class="mx-2 mt-4"
-    />
+    <div id="button-wrapper" class="flex pt-4">
+      <Button 
+        @click="goBack"
+        label="Back"
+        class="!bg-blue-600 hover:!bg-blue-500 !border-blue-600 hover:!border-blue-500"
+      />
+      <Button 
+        @click="downloadPDF(vacancy.owner)" 
+        icon="pi pi-download"
+        label="Get contact info"
+        class="mx-2"
+      />
+  
+      <div v-if="isAdmin" id="delete-wrapper" class="ml-auto">
+        <Button 
+          @click="deleteVacancy"
+          severity="danger"
+          icon="pi pi-trash"
+          label="Delete"
+          class=""
+        />
+      </div>
+    </div>
 
   </div>
 </template>
