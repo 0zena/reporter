@@ -3,9 +3,9 @@ import NavBar from "@/components/navigationbar/NavBar.vue";
 import AdminTable from "@/components/AdminTable.vue";
 import CategoryEditor from "@/components/CategoryEditor.vue";
 
-import { inject, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
-const isAdmin = ref(false); // Local ref to manage admin status
+const isAdmin = ref(false);
 
 onMounted(async () => {
   try {
