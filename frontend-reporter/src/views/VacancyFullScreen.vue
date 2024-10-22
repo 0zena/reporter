@@ -131,10 +131,8 @@ const goBack = () => {
           severity="danger"
           icon="pi pi-trash"
           label="Delete"
-          class=""
         />
       </div>
     </div>
-
   </div>
 </template>

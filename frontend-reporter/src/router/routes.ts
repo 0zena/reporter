@@ -10,7 +10,6 @@ import VacancyEditor from '@/views/VacancyEditor.vue';
 import VacancyFullScreen from '../views/VacancyFullScreen.vue';
 const routes = [
     { path: '/', name: 'home', component: HomePage },
-    { path: '/about', name: 'about', component: () => import('../views/AboutView.vue') },
     { path: '/vacancies', name: 'vacancies', component: VacanciesList },
     { path: '/login', name: 'login', component: LoginView },
     { path: '/forgot-password', name: 'forgot-password', component: ForgotPassword },
@@ -18,8 +17,8 @@ const routes = [
     { path: '/exports', name: 'exports', component: Exports },
     { path: '/admin', name: 'admin', component: Admin },
     { path: '/editor', name: 'editor', component: VacancyEditor },
-    { path: '/:catchAll(.*)', name: 'NotFound', component: NotFound },  // Comma added here
-    { path: '/vacancy/fullscreen', name: 'vacancy-fullscreen', component: VacancyFullScreen },  // This route is now correctly placed
+    { path: '/vacancy/fullscreen', name: 'vacancy-fullscreen', component: VacancyFullScreen },
+    { path: '/:catchAll(.*)', name: 'NotFound', component: NotFound },
   ];
   
   export default routes;
