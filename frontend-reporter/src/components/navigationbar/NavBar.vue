@@ -2,7 +2,6 @@
   <header>
     <nav>
       <div class="flex justify-between h-16 px-10 shadow items-center bg-white">
-        <!-- Logo and Nav links -->
         <div class="flex items-center space-x-8">
           <router-link to="/" class="text-xl font-bold cursor-pointer text-black">
             Reporter
