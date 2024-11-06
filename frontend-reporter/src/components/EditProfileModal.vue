@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div v-if="visible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-black p-6 rounded-lg shadow-lg w-full max-w-md">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-gray-300 text-xl font-semibold">Edit Profile</h3>
