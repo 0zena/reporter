@@ -9,6 +9,7 @@ import Admin from "@/views/Admin.vue";
 import VacancyEditor from '@/views/VacancyEditor.vue';
 import VacancyFullScreen from '../views/VacancyFullScreen.vue';
 import FavoritesList from '@/views/FavoritesList.vue';
+import UserGuide from '@/views/UserGuide.vue';
 
 const routes = [
     { path: '/', name: 'home', component: HomePage },
@@ -21,6 +22,7 @@ const routes = [
     { path: '/editor', name: 'editor', component: VacancyEditor },
     { path: '/vacancy/fullscreen', name: 'vacancy-fullscreen', component: VacancyFullScreen },
     { path: '/favorites', name: 'favorites', component: FavoritesList },
+    { path: '/user-guide', name: 'user-guide', component: UserGuide },
     { path: '/:catchAll(.*)', name: 'NotFound', component: NotFound },
   ];
   
