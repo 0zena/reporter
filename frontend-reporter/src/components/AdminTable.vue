@@ -36,17 +36,19 @@ const toggleAdminStatus = async (user, value) => {
 };
 
 const deleteUser = async (userId) => {
-  try {
-    const response = await fetch(`http://localhost:8000/api/users/${userId}`, {
-      method: 'DELETE',
-    });
-    if (response.ok) {
-      users.value = users.value.filter(user => user.id !== userId);
-    } else {
-      console.error('Error deleting user');
+  if (confirm("Are you sure you want to delete this user?")) {
+    try {
+      const response = await fetch(`http://localhost:8000/api/users/${userId}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        users.value = users.value.filter(user => user.id !== userId);
+      } else {
+        console.error('Error deleting user');
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
     }
-  } catch (error) {
-    console.error('Error deleting user:', error);
   }
 };
 
