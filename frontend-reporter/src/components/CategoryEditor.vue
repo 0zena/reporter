@@ -96,5 +96,8 @@ fetchCategories();
                 <Button label="Save" icon="pi pi-check" iconPos="right" @click="createSpeciality" />
             </div>
         </div>
+        <router-link class="p-button w-[150px] mt-5" to="/admin-guide">
+            Admin Guide
+        </router-link>
     </div>
 </template>
