@@ -58,6 +58,21 @@
           <Button label="Save" class="p-button-primary" type="submit" icon="pi pi-check" iconPos="right" />
         </div>
 
+        <div v-if="!user.email_verified_at" class="flex justify-end mt-4">
+          <Button label="Confirm email" class="p-button" icon="pi pi-check-square" @click="showConfirmModal = true" />
+     
+        
+      </div>
+      <div v-if="showConfirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-black p-6 rounded-lg shadow-lg w-full max-w-md">
+      <h3 class="text-gray-300 text-xl mb-4 font-semibold">Confirm Email Verification</h3>
+      <p class="text-gray-400 mb-4">We will send a verification link to your email. Are you sure?</p>
+      <div class="flex justify-end">
+        <Button label="Send Verification Email" class="p-button-primary" @click="sendVerificationEmail" />
+        <Button label="Cancel" class="p-button-secondary ml-2" @click="showConfirmModal = false" />
+      </div>
+    </div>
+  </div>
         <!-- Delete Account Button -->
       <div class="flex justify-end mt-4">
         <Button label="Delete Account" class="p-button-danger" icon="pi pi-trash" @click="showDeleteModal = true" />
@@ -97,8 +112,34 @@ const props = defineProps({
   user: Object,
 });
 
+const showConfirmModal = ref(false);
 const emit = defineEmits(['close']);
 
+const sendVerificationEmail = async () => {
+  try {
+    const response = await fetch('http://localhost:8000/api/send-verification-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include', // Keep user logged in
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      toast.add({ severity: 'success', summary: 'Success', detail: data.message, life: 3000 });
+      showConfirmModal.value = false; // Close modal after success
+    } else {
+      const errorData = await response.json();
+      toast.add({ severity: 'error', summary: 'Error', detail: errorData.message, life: 3000 });
+    }
+  } catch (error) {
+    console.error('Failed to send verification email', error);
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to send verification email', life: 3000 });
+  }
+};
+
+ 
 const userData = ref({
   name: '',
   surname: '',
