@@ -78,9 +78,17 @@ const surnameError = ref('');
 const emailError = ref('');
 const router = useRouter();
 
-const validateName = (value: string) => /^[a-zA-Z]+$/.test(value);
-const validatePhoneNumber = (value: string) => /^\+?\d+$/.test(value);  // Optional "+" at the beginning
-const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+const validateName = (value: string) => /^[a-zA-Z]{3,30}$/.test(value);
+const validatePhoneNumber = (value: string) => {
+  return (
+    (value.length === 8 && /^\d+$/.test(value)) || // 8-digit phone number
+    (value.length === 12 && /^\+\d+$/.test(value)) // 12-character phone number with "+"
+  );
+};
+const validateEmail = (value: string) => {
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(value) && value.length <= 254;
+};
 
 const register = async () => {
   // Clear previous errors
@@ -92,19 +100,19 @@ const register = async () => {
 
   // Name validation
   if (!validateName(name.value)) {
-    nameError.value = 'Name must contain only letters.';
+    nameError.value = 'Name must contain only letters and be between 3 and 30 characters long.';
     return;
   }
 
   // Surname validation
   if (!validateName(surname.value)) {
-    surnameError.value = 'Surname must contain only letters.';
+    surnameError.value = 'Surname must contain only letters and be between 3 and 30 characters long.';
     return;
   }
 
   // Phone number validation (if provided)
   if (phoneNumber.value && !validatePhoneNumber(phoneNumber.value)) {
-    phoneError.value = 'Phone number must contain only numbers and may start with a "+".';
+    phoneError.value = 'Phone number must be either 8 digits or 12 characters long with an "+". (Example: 24647358; +37124647358)';
     return;
   }
 
@@ -137,17 +145,22 @@ const register = async () => {
         email: email.value,
         phone_number: phoneNumber.value,
         password: password.value,
-        password_confirmation: passwordConfirmation.value
-      })
+        password_confirmation: passwordConfirmation.value,
+      }),
     });
 
     if (response.ok) {
-      successMessage.value = 'You are registered!'; 
+      successMessage.value = 'You are registered!';
       setTimeout(() => {
-        router.push('/login'); 
-      }, 2000); 
+        router.push('/login');
+      }, 2000);
     } else {
-      errorMessage.value = 'Failed to register. Try again.';
+      const data = await response.json();
+      if (data.message === 'Email already in use') {
+        emailError.value = 'This email is already registered.';
+      } else {
+        errorMessage.value = 'Failed to register. Please try again.';
+      }
     }
   } catch (error) {
     errorMessage.value = 'An error occurred. Please try again later.';

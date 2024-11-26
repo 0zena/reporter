@@ -11,27 +11,36 @@ class UserController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone_number' => 'nullable|string|max:17',
-            'password' => 'required|string|min:8|confirmed', // Frontend request needs to have field: 'password_confirmation'
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'surname' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'phone_number' => 'nullable|string|max:17',
+                'password' => 'required|string|min:8|confirmed',
+            ]);
 
-        $user = User::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'password' => Hash::make($request->password),
-        ]);
+            $user = User::create([
+                'name' => $request->name,
+                'surname' => $request->surname,
+                'email' => $request->email,
+                'phone_number' => $request->phone_number,
+                'password' => Hash::make($request->password),
+            ]);
 
-        Auth::login($user);
-        $request->session()->regenerate();
+            Auth::login($user);
+            $request->session()->regenerate();
 
-        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
+            return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $errors = $e->validator->errors();
+            if ($errors->has('email')) {
+                return response()->json(['message' => 'Email already in use'], 400);
+            }
+            return response()->json(['message' => 'Validation error', 'errors' => $errors], 400);
+        }
     }
+
 
     public function login(Request $request)
     {
