@@ -21,6 +21,7 @@ use App\Http\Controllers\VacanciesController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\SpecialitiesController;
 use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\VerificationController;
 
 Route::middleware(['web'])->group(function () {
     Route::post('/register', [UserController::class, 'register']);
@@ -31,10 +32,13 @@ Route::middleware(['web'])->group(function () {
     Route::post('/delete-account', [UserController::class, 'deleteAccount']);
 
     Route::post('/vacancies', [VacanciesController::class, 'store'])->middleware('auth');
-
-    Route::get('/favorites/{vacancyId}', [FavoritesController::class, 'isFavorited'])->middleware('auth');
+     Route::get('/favorites/{vacancyId}', [FavoritesController::class, 'isFavorited'])->middleware('auth');
     Route::post('/favorites/{vacancyId}', [FavoritesController::class, 'toggleFavorite'])->middleware('auth');
     Route::get('/get-favorites', [FavoritesController::class, 'getFavoritedVacancies'])->middleware('auth');
+
+    Route::post('/send-verification-email', [VerificationController::class, 'sendVerificationEmail'])->middleware('auth');
+
+    
 });
 
 Route::get('/users', [UserController::class, 'index']);
@@ -57,3 +61,4 @@ Route::get('/specialities/{categoryId}', [SpecialitiesController::class, 'getByC
 Route::get('/vacancies/{id}', [VacanciesController::class, 'show']);
 Route::get('/vacancies', [VacanciesController::class, 'index']);
 Route::delete('/vacancies/{id}', [VacanciesController::class, 'destroy']);
+
