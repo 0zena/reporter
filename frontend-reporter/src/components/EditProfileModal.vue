@@ -136,9 +136,17 @@ watch(
   { immediate: true }
 );
 
-const validateName = (value: string) => /^[a-zA-Z]+$/.test(value);
-const validatePhoneNumber = (value: string) => /^\+?\d+$/.test(value);
-const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
+const validateName = (value: string) => /^[a-zA-Z]{3,30}$/.test(value);
+const validatePhoneNumber = (value: string) => {
+  return (
+    (value.length === 8 && /^\d+$/.test(value)) || // 8-digit phone number
+    (value.length === 12 && /^\+\d+$/.test(value)) // 12-character phone number with "+"
+  );
+};
+const validateEmail = (value: string) => {
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(value) && value.length <= 254;
+};
 const validatePassword = (password: string) => password.length >= 8;
 
 const updateProfile = async () => {
@@ -153,19 +161,19 @@ const updateProfile = async () => {
 
   // Name validation
   if (!validateName(userData.value.name)) {
-    nameError.value = 'Name must contain only letters';
+    nameError.value = 'Name must contain only letters and be between 3 and 30 characters long.';
     return;
   }
 
   // Surname validation
   if (!validateName(userData.value.surname)) {
-    surnameError.value = 'Surname must contain only letters';
+    surnameError.value = 'Surname must contain only letters and be between 3 and 30 characters long.';
     return;
   }
 
   // Phone number validation (if provided)
   if (userData.value.phone_number && !validatePhoneNumber(userData.value.phone_number)) {
-    phoneError.value = 'Phone number must contain only numbers and may start with a "+"';
+    phoneError.value = 'Phone number must be either 8 digits or 12 characters long with an "+". (Example: 24647358; +37124647358)';
     return;
   }
 
