@@ -22,6 +22,7 @@ const selectedSpecialityId = ref<number | null>(null);
 const categories = ref<any[]>([]);
 const specialities = ref<any[]>([]);
 
+const isFilterMenuVisible = ref(false);
 
 const goToEditor = () => {
   router.push('/editor');
@@ -136,20 +137,39 @@ const resetFilters = () => {
     <NavigationBar></NavigationBar>
     <div id="main" class="w-full h-auto min-h-full flex flex-row-reverse">
 
-      <div id="menu" class="bg-zinc-400 w-[350px] min-h-[calc(100vh-64px)] p-4">
+      <!-- Menu -->
+      <div
+        id="menu"
+        :class="[
+          'bg-zinc-400 min-w-[350px] min-h-[calc(100vh-64px)] p-4',
+          isFilterMenuVisible ? 'absolute top-0 left-0 w-full h-full z-50' : 'hidden lg:block'
+        ]"
+      >
+        <!-- Close Button (Visible on small screens) -->
+        <Button
+          v-if="isFilterMenuVisible"
+          icon="pi pi-times"
+          class="absolute top-4 right-4"
+          @click="isFilterMenuVisible = false"
+        />
 
-        <IconField class="mt-5 ">
+        <!-- Search -->
+        <IconField class="mt-5">
           <InputIcon class="pi pi-search" />
-          <InputText 
-            v-model="searchTerm" 
-            placeholder="Search vacancies by title..." 
+          <InputText
+            v-model="searchTerm"
+            placeholder="Search vacancies by title..."
             class="w-full px-4 py-2 rounded-md border border-gray-300 text-black"
           />
         </IconField>
 
+        <!-- Sort Options -->
         <div class="mt-4">
           <h3 class="text-lg text-black font-semibold mb-2">Sort by:</h3>
-          <select v-model="selectedSortOption" class="w-full px-4 py-2 rounded-md border border-gray-300 text-black">
+          <select
+            v-model="selectedSortOption"
+            class="w-full px-4 py-2 rounded-md border border-gray-300 text-black"
+          >
             <option value="">Default</option>
             <option value="name-asc">Name (A-Z)</option>
             <option value="name-desc">Name (Z-A)</option>
@@ -159,11 +179,12 @@ const resetFilters = () => {
             <option value="date-oldest">Oldest</option>
           </select>
         </div>
-        
+
+        <!-- Filters -->
         <div class="mt-4">
           <h3 class="text-lg text-black font-semibold mb-2">Filter:</h3>
 
-           <p class="text-black">Categories</p>
+          <p class="text-black">Categories</p>
           <Select
             v-model="selectedCategoryId"
             :options="[{ id: null, name: 'All' }, ...categories]"
@@ -183,30 +204,47 @@ const resetFilters = () => {
             :disabled="!selectedCategoryId"
             class="w-full mb-4"
           />
-
         </div>
 
+        <!-- Reset Filters Button -->
         <Button label="Reset Filters" class="w-full" @click="resetFilters" />
-
       </div>
 
-      <Button icon="pi pi-plus" class="h-10 m-5" style="width: 3rem;" @click="goToEditor"/>
-
-      <div id="listing-wrapper" class="w-full h-full flex flex-col justify-center items-center pt-[75px] pb-[50px]">
-        <div v-if="sortedVacancies.length" class="w-full flex flex-wrap justify-center">
-          <VacancySmallListing 
-            v-for="(vacancy, index) in sortedVacancies" 
-            :key="index" 
-            :id="vacancy.id"
-            :image="vacancy.vacancy_image ? 'http://127.0.0.1:8000/storage/' + vacancy.vacancy_image.image_path : undefined" 
-            :title="vacancy.title" 
-            :category="vacancy.category"
-            :speciality="vacancy.speciality"
+      <!-- Main Content -->
+      <div class="w-full flex flex-col">
+        <!-- Filter and Editor Buttons -->
+        <div id="button-wrapper" class="flex h-[70px] w-full justify-between">
+          <Button icon="pi pi-plus" class="h-10 m-5" style="width: 2.5rem;" @click="goToEditor" />
+          <Button
+            icon="pi pi-filter"
+            class="h-10 m-5 lg:!hidden"
+            style="width: 2.5rem;"
+            @click="isFilterMenuVisible = !isFilterMenuVisible"
           />
         </div>
-        <p v-else>No vacancies found.</p>
+
+        <!-- Vacancies Listing -->
+        <div
+          id="listing-wrapper"
+          class="w-full h-full flex flex-col items-center pb-[50px]"
+        >
+          <div
+            v-if="sortedVacancies.length"
+            class="w-full flex flex-wrap justify-center"
+          >
+            <VacancySmallListing
+              v-for="(vacancy, index) in sortedVacancies"
+              :key="index"
+              :id="vacancy.id"
+              :image="vacancy.vacancy_image ? 'http://127.0.0.1:8000/storage/' + vacancy.vacancy_image.image_path : undefined"
+              :title="vacancy.title"
+              :category="vacancy.category"
+              :speciality="vacancy.speciality"
+            />
+          </div>
+          <p v-else>No vacancies found.</p>
+        </div>
       </div>
-      
     </div>
   </div>
 </template>
