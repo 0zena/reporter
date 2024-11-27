@@ -47,7 +47,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
     
-        return redirect('/home')->with('verified', true);
+        return redirect('http://localhost:5173/')->with('verified', true);
     })->middleware(['auth', 'signed'])->name('verification.verify');
     
     Route::post('/email/verification-notification', function (Request $request) {
