@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch} from 'vue'; // Ensure 'watch' is imported
+import { ref, computed, onMounted, watch} from 'vue';
 import NavigationBar from '../components/navigationbar/NavBar.vue';
 import VacancySmallListing from '@/components/VacancySmallListing.vue';
 
 import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';  // Import PrimeVue InputText
+import InputText from 'primevue/inputtext';
 import Select from 'primevue/select';
 import { useRouter } from 'vue-router';
 

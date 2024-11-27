@@ -25,6 +25,19 @@ const fetchVacancies = async () => {
   }
 };
 
+const filteredVacancies = computed(() => {
+  let filtered = vacancies.value;
+
+  if (searchTerm.value.trim()) {
+    const term = searchTerm.value.toLowerCase();
+    filtered = filtered.filter(vacancy => 
+      vacancy.title.toLowerCase().includes(term)
+    );
+  }
+
+  return filtered;
+});
+
 onMounted(() => {
   fetchVacancies();
 });
@@ -50,9 +63,9 @@ onMounted(() => {
       </div>
 
       <div id="listing-wrapper" class="w-full h-full flex flex-col justify-center items-center pt-[75px] pb-[50px]">
-        <div v-if="vacancies.length" class="w-full flex flex-wrap justify-center">
+        <div v-if="filteredVacancies.length" class="w-full flex flex-wrap justify-center">
           <VacancySmallListing 
-            v-for="(vacancy, index) in vacancies" 
+            v-for="(vacancy, index) in filteredVacancies" 
             :key="index" 
             :id="vacancy.id"
             :image="vacancy.vacancy_image ? 'http://127.0.0.1:8000/storage/' + vacancy.vacancy_image.image_path : undefined" 
