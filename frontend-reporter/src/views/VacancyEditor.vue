@@ -111,6 +111,10 @@ async function submitVacancy() {
 onMounted(() => {
   fetchCategories();
 });
+
+const goToVacancies = () => {
+  router.push('/vacancies'); 
+};
 </script>
 
 <template>
@@ -179,7 +183,7 @@ onMounted(() => {
     
             <div id="save-wrapper" class="flex justify-end">
                 <Button label="Save" icon="pi pi-check" class="mr-2" @click="submitVacancy" />
-                <Button label="Cancel" icon="pi pi-times" />
+                <Button label="Cancel" icon="pi pi-times" @click="goToVacancies"/>
             </div>
         </div>
       </div>
