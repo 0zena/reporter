@@ -22,8 +22,10 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\SpecialitiesController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\VerificationController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::middleware(['web'])->group(function () {
+
     Route::post('/register', [UserController::class, 'register']);
     Route::post('/login', [UserController::class, 'login']);
     Route::post('/logout', [UserController::class, 'logout']);
@@ -37,6 +39,22 @@ Route::middleware(['web'])->group(function () {
     Route::get('/get-favorites', [FavoritesController::class, 'getFavoritedVacancies'])->middleware('auth');
 
     Route::post('/send-verification-email', [VerificationController::class, 'sendVerificationEmail'])->middleware('auth');
+
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->middleware('auth')->name('verification.notice');
+    
+    Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+        $request->fulfill();
+    
+        return redirect('/home')->with('verified', true);
+    })->middleware(['auth', 'signed'])->name('verification.verify');
+    
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+    
+        return back()->with('message', 'Verification link sent!');
+    })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
     
 });
 
@@ -63,4 +81,3 @@ Route::get('/vacancies/{id}', [VacanciesController::class, 'show']);
 Route::get('/vacancies', [VacanciesController::class, 'index']);
 Route::delete('/vacancies/{id}', [VacanciesController::class, 'destroy']);
 Route::get('/vacancies/{id}/download-pdf', [PDFExportController::class, 'exportVacancyPDF']);
-
