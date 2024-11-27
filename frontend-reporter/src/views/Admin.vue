@@ -40,7 +40,14 @@ onMounted(async () => {
       
       <div v-if="isAdmin" class="flex">
         <AdminTable></AdminTable>
-        <CategoryEditor></CategoryEditor>
+        <div id="buttons" class="flex flex-col mt-1">
+          <router-link class="p-button w-[175px] h-[50px] mt-5" to="/admin/add-category">
+            Add Category/Speciality
+          </router-link>
+          <router-link class="p-button w-[175px] h-[50px] mt-5" to="/admin-guide">
+            Admin Guide
+          </router-link>
+        </div>
       </div>
       <div v-else class="flex flex-col justify-center items-center">
         <i class="pi pi-ban text-red-500 pt-20 pb-10" style="font-size: 20rem;"></i>

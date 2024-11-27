@@ -11,6 +11,7 @@ import VacancyFullScreen from '../views/VacancyFullScreen.vue';
 import FavoritesList from '@/views/FavoritesList.vue';
 import UserGuide from '@/views/UserGuide.vue';
 import AdminGuide from '@/views/AdminGuide.vue';
+import CategoryEditorPage from '@/views/CategoryEditorPage.vue';
 
 const routes = [
     { path: '/', name: 'home', component: HomePage },
@@ -25,6 +26,7 @@ const routes = [
     { path: '/favorites', name: 'favorites', component: FavoritesList },
     { path: '/user-guide', name: 'user-guide', component: UserGuide },
     { path: '/admin-guide', name: 'admin-guide', component: AdminGuide },
+    { path: '/admin/add-category', name: 'category-editor', component: CategoryEditorPage },
     { path: '/:catchAll(.*)', name: 'NotFound', component: NotFound },
   ];
   
