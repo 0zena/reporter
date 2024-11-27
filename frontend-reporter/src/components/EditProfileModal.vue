@@ -36,35 +36,32 @@
 
         <h3 class="text-gray-300 text-xl mb-3 font-semibold">Reset Password</h3>
 
-        <!-- Current Password Field -->
         <label for="current_password" class="block text-sm font-medium text-gray-300">Current Password</label>
         <Password v-model="currentPassword" id="current_password" toggleMask class="w-full input-password" :feedback="false" />
         <p v-if="currentPasswordError" class="text-red-500">{{ currentPasswordError }}</p>
 
-        <!-- New Password Field -->
         <div class="mb-4 mt-4">
           <label for="new_password" class="block text-sm font-medium text-gray-300">New Password</label>
           <Password v-model="newPassword" id="new_password" toggleMask class="w-full input-password" />
           <p v-if="newPasswordError" class="text-red-500">{{ newPasswordError }}</p>
         </div>
 
-        <!-- Confirm New Password Field -->
         <label for="confirm_password" class="block text-sm font-medium text-gray-300">Confirm New Password</label>
         <Password v-model="confirmNewPassword" id="confirm_password" toggleMask class="w-full input-password" :feedback="false"/>
         <p v-if="confirmPasswordError" class="text-red-500">{{ confirmPasswordError }}</p>
 
-        <!-- Save Button -->
-        <div class="flex justify-end mt-4">
-          <Button label="Save" class="p-button-primary" type="submit" icon="pi pi-check" iconPos="right" />
+        <div class="flex justify-between">
+          <div v-if="!user.email_verified_at" class="flex justify-end mt-4">
+            <Button label="Confirm email" class="p-button" icon="pi pi-check-square" @click="showConfirmModal = true" />
+          </div>
+
+          <div class="flex justify-end mt-4">
+            <Button label="Save" class="p-button-primary" type="submit" icon="pi pi-check" iconPos="right" />
+          </div>
         </div>
 
-        <div v-if="!user.email_verified_at" class="flex justify-end mt-4">
-          <Button label="Confirm email" class="p-button" icon="pi pi-check-square" @click="showConfirmModal = true" />
-     
-        
-      </div>
       <div v-if="showConfirmModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-black p-6 rounded-lg shadow-lg w-full max-w-md">
+    <div class="bg-[#373737] p-6 rounded-lg shadow-lg max-w-md">
       <h3 class="text-gray-300 text-xl mb-4 font-semibold">Confirm Email Verification</h3>
       <p class="text-gray-400 mb-4">We will send a verification link to your email. Are you sure?</p>
       <div class="flex justify-end">
@@ -80,7 +77,7 @@
 
       <!-- Delete Confirmation Modal -->
       <div v-if="showDeleteModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-black p-6 rounded-lg shadow-lg w-full max-w-md">
+        <div class="bg-[#373737] p-6 rounded-lg shadow-lg max-w-md">
           <h3 class="text-gray-300 text-xl mb-4 font-semibold">Confirm Account Deletion</h3>
           <p class="text-gray-400 mb-4">Please enter your password to confirm account deletion.</p>
           <Password v-model="deletePassword" class="w-full input-password mb-4" placeholder="Enter your password" toggleMask :feedback="false" />
