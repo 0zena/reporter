@@ -62,4 +62,5 @@ Route::post('/specialities/check', [SpecialitiesController::class, 'checkIfExist
 Route::get('/vacancies/{id}', [VacanciesController::class, 'show']);
 Route::get('/vacancies', [VacanciesController::class, 'index']);
 Route::delete('/vacancies/{id}', [VacanciesController::class, 'destroy']);
+Route::get('/vacancies/{id}/download-pdf', [PDFExportController::class, 'exportVacancyPDF']);
 
