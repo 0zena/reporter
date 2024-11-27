@@ -22,6 +22,18 @@ class CategoriesController extends Controller
 
     public function index()
     {
-        return response()->json(Category::all()); // Return all categories as JSON
+        return response()->json(Category::all());
     }
+
+    public function checkIfExists(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $exists = Category::where('name', $request->name)->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
+    
 }
