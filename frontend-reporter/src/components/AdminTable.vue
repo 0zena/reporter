@@ -4,16 +4,37 @@ import Button from 'primevue/button';
 import { ref, onMounted } from 'vue';
 
 const users = ref([]);
+const currentUserID = ref(null);
+
+const fetchCurrentUserID = async () => {
+  try {
+    const response = await fetch('http://localhost:8000/api/user', {
+      credentials: 'include',
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+
+      if (data.user) {
+        currentUserID.value = data.user.id;
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching logged-in user ID:', error);
+  }
+};
 
 const fetchUsers = async () => {
   try {
     const response = await fetch('http://localhost:8000/api/users');
     if (response.ok) {
       const data = await response.json();
-      users.value = data.map(user => ({
-        ...user,
-        is_admin: Boolean(user.is_admin),
-      }));
+      users.value = data
+        .filter(user => user.id !== currentUserID.value)
+        .map(user => ({
+          ...user,
+          is_admin: Boolean(user.is_admin),
+        }));
     }
   } catch (error) {
     console.error('Error fetching users:', error);
@@ -53,6 +74,7 @@ const deleteUser = async (userId) => {
 };
 
 onMounted(() => {
+  fetchCurrentUserID();
   fetchUsers();
 });
 </script>

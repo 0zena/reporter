@@ -37,7 +37,6 @@ Route::middleware(['web'])->group(function () {
     Route::get('/get-favorites', [FavoritesController::class, 'getFavoritedVacancies'])->middleware('auth');
 
     Route::post('/send-verification-email', [VerificationController::class, 'sendVerificationEmail'])->middleware('auth');
-
     
 });
 
@@ -54,11 +53,14 @@ Route::get('/export-pdf-test', [PDFExportController::class, 'status']);
 
 Route::post('/categories', [CategoriesController::class, 'store']);
 Route::get('/categories', [CategoriesController::class, 'index']);
+Route::post('/categories/check', [CategoriesController::class, 'checkIfExists']);
 
 Route::post('/specialities', [SpecialitiesController::class, 'store']);
 Route::get('/specialities/{categoryId}', [SpecialitiesController::class, 'getByCategory']);
+Route::post('/specialities/check', [SpecialitiesController::class, 'checkIfExists']);
 
 Route::get('/vacancies/{id}', [VacanciesController::class, 'show']);
 Route::get('/vacancies', [VacanciesController::class, 'index']);
 Route::delete('/vacancies/{id}', [VacanciesController::class, 'destroy']);
+Route::get('/vacancies/{id}/download-pdf', [PDFExportController::class, 'exportVacancyPDF']);
 

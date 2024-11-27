@@ -32,4 +32,18 @@ class SpecialitiesController extends Controller
 
         return response()->json($specialities, 200);
     }
+
+    public function checkIfExists(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'category_id' => 'required|integer|exists:categories,id',
+        ]);
+
+        $exists = Speciality::where('name', $request->name)
+            ->where('category_id', $request->category_id)
+            ->exists();
+
+        return response()->json(['exists' => $exists]);
+    }
 }

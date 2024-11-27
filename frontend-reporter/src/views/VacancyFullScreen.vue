@@ -119,6 +119,24 @@ const downloadPDF = async (id) => {
   }
 };
 
+const downloadVacancyPDF = async (id) => {
+  try {
+    const response = await axios.get(`http://localhost:8000/api/vacancies/${id}/download-pdf`, {
+      responseType: 'blob',
+    });
+
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `vacancy_${id}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error('Error downloading the vacancy PDF:', error);
+  }
+};
+
 const deleteVacancy = async () => {
   if (confirm("Are you sure you want to delete this vacancy?")) {
     try {
@@ -185,6 +203,12 @@ const canDelete = computed(() => {
         @click="downloadPDF(vacancy.owner)" 
         icon="pi pi-download"
         label="Get contact info"
+        class="mx-2"
+      />
+      <Button 
+        @click="downloadVacancyPDF(id)" 
+        icon="pi pi-file-pdf"
+        label="Download Vacancy"
         class="mx-2"
       />
       <div v-if="canDelete" id="delete-wrapper" class="ml-auto">
