@@ -31,9 +31,8 @@
 
       <!-- Mobile Menu Dropdown -->
       <div v-if="isOpen" class="bg-white shadow-lg px-6 py-4 space-y-2 md:hidden">
-        <a href="#" class="block text-gray-700 link-underline">Vacancies</a>
-        <a href="#" class="block text-gray-700 link-underline">My Vacancies</a>
-        <a href="#" class="block text-gray-700 link-underline">Favorites</a>
+        <router-link class="block text-gray-700 link-underline" to="/vacancies">Vacancies</router-link>
+        <router-link class="block text-gray-700 link-underline" to="/favorites">Favorites</router-link>
 
         <!-- Add HeaderButtons in the mobile dropdown -->
         <div class="border-t mt-2 pt-2">
