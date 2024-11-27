@@ -2,6 +2,7 @@
   <div class="top-0 right-0 p-4">
     <div v-if="isAuthenticated">
       <!-- Show the 'Edit Profile' and 'Logout' buttons if the user is logged in -->
+      <Button v-if="isAdmin" label="Admin" class="mr-2" icon="pi pi-cog" @click="router.push('/admin')" />
       <Button label="Edit Profile" class="p-button-warning mr-2" icon="pi pi-user" @click="openEditProfileModal" />
       <Button label="Logout" class="p-button-danger" @click="logout" />
     </div>
@@ -32,6 +33,7 @@ const setAuthenticated = inject('setAuthenticated') as (value: boolean) => void;
 const isEditProfileModalVisible = ref(false); // State for modal visibility
 const currentUser = ref(null); // Store user data for editing
 const router = useRouter();
+const isAdmin = ref(false);
 
 // Functions for logout and modal visibility
 const logout = async () => {
@@ -78,10 +80,18 @@ onMounted(async () => {
     if (response.ok) {
       const data = await response.json();
       if (data.user) {
-        setAuthenticated(true); // Set auth state to true if session exists
-        currentUser.value = data.user; // Store user data in currentUser
+        setAuthenticated(true);
+        currentUser.value = data.user;
+
+        if (data.user['is_admin'] === 1) {
+          isAdmin.value = true;
+        } else {
+          isAdmin.value = false;
+        }
+
       } else {
         setAuthenticated(false);
+        isAdmin.value = false;
       }
     }
   } catch (error) {
