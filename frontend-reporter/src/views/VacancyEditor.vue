@@ -114,20 +114,19 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="w-full min-h-screen h-auto bg-zinc-500">
+    <div class="max-w-full min-h-screen h-auto bg-zinc-500">
       <NavigationBar />
-      <div id="main" class="w-full h-auto flex flex-col justify-center items-center">
-  
-        <div id="editor-wrapper" class="mt-10">
+      <div id="main" class="flex flex-col w-full h-auto items-center">
+        <div id="editor-wrapper" class="mt-10 px-4 w-full max-w-[850px]">
             <div id="img-wrapper" class="flex items-end">
-                <Skeleton v-if="!src" size="10rem"></Skeleton>
+                <Skeleton v-if="!src" size="10rem" />
                 <img v-if="src" :src="src" alt="Image" class="shadow-md rounded-xl w-full sm:w-64" />
                 <FileUpload mode="basic" @select="onFileSelect" customUpload auto severity="secondary" class="p-button-outlined mx-2" accept="image/*"/>
             </div>
     
-            <InputText v-model="title" type="text" size="large" class="w-[750px] my-5 block" placeholder="Title" />
+            <InputText v-model="title" type="text" size="large" class=" block w-full my-5" placeholder="Title" />
 
-            <div class="flex flex-col w-[750px] my-5">
+            <div class="flex flex-col w-full my-5">
                 <Select
                     v-model="selectedCategoryId"
                     :options="categories"
@@ -147,7 +146,7 @@ onMounted(() => {
                 />
             </div>
     
-            <Editor v-model="description" editorStyle="height: 320px" class="my-5 w-[850px]">
+            <Editor v-model="description" editorStyle="height: 320px" class="my-5 w-full">
                 <template v-slot:toolbar>
                     <span class="ql-formats">
                         <select class="ql-header">
@@ -183,7 +182,6 @@ onMounted(() => {
                 <Button label="Cancel" icon="pi pi-times" />
             </div>
         </div>
-  
       </div>
     </div>
 </template>
